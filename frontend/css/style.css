@@ -27,9 +27,9 @@ html {
 }
 
 body {
+    margin: 0;
     font-family: "Roboto Regular", sans-serif;
     text-align: center;
-    background-color: yellow;
     height: 100%;
     background-color: #ffc80a;
 }
@@ -38,9 +38,74 @@ body {
     height:100%;
 }
 .container {
+    padding: 0;
     outline: auto;
     width: 75.937540%;  /* 972px / 1280px */
     height: 100%;
     margin: 0 auto;
+    padding-top: 1px;
 }
 
+.logo {
+    width: 115px;
+    margin-top: 36px;
+    float: left;
+}
+
+.number_loupe {
+    position: relative;
+    margin: 0 auto;
+    width: 300px;
+}
+
+.number_loupe>input {
+    height: 48px;
+    width: 252px;
+    border: none;
+    outline: none;
+}
+
+.number_loupe>input:focus {
+    border: none ;
+}
+
+.number_loupe::before {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 48px;
+    height: 100%;
+    background-color: white;
+    left: -24px;
+    border-radius: 48px 0 0 48px;
+}
+
+.number_loupe::after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 48px;
+    height: 100%;
+    background-color: white;
+    right: 0;
+    top:0;
+    border-radius: 0 48px 48px 0;
+    z-index: -1;
+}
+
+.loupe {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    background: url("../img/search_1.png") no-repeat;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+.loupe:hover {
+    background: url("../img/search_3.png");
+}
+
+form {
+    margin-top: 255px
+}

@@ -12,10 +12,15 @@
 <body>
 <header class="header">
     <div class="container">
-        <h2>ИКАПАЛКА</h2>
+        <div class="logo">
+            <img src="img/logo_small.png" alt="">
+        </div>
         <form action="get">
-            <input type="text" placeholder="введите 9-значный номер">
-            <button type="submit">НАЙТИ</button>
+             <div class="number_loupe">
+                <input type="text" id="number" name="number" placeholder="XXX-XXX-XXX">
+                <div class="loupe"></div>
+             </div>
+            <button class="find_button" type="submit">НАЙТИ</button>
         </form>
 </header>
 <main class="main_content">
