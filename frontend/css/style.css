@@ -22,17 +22,25 @@
 
 
 /*--- ---*/
+html {
+    height: 100%;
+}
 
 body {
     font-family: "Roboto Regular", sans-serif;
     text-align: center;
+    background-color: yellow;
+    height: 100%;
+    background-color: #ffc80a;
+}
+
+.header {
+    height:100%;
 }
 .container {
-    background-color: #67b168;
-    width: 60%;
+    outline: auto;
+    width: 75.937540%;  /* 972px / 1280px */
+    height: 100%;
     margin: 0 auto;
 }
 
-.info {
-    margin-top: 10%;
-}
