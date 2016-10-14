@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <meta title="ИКАКПАЛКА">
+    <meta encoding="etf-8">
+  </head>
+  <body>
+  <a href="/"><h1>ИКАКПАЛКА</h1></a>
+  {% block content_lvl_1 %}
+  {% end %}
+  <script src="/static/js/jquery-1.12.4.min.js"></script>
+  <script src="/static/js/jquery.mask.min.js"></script>
+  <script>
+    $("#search_input").mask("999-999-999");
+    $('#btn_login').click(function(){
+      $('#account_form').attr('action', '/login');
+     });
+
+
+    $('#btn_registration').click(function(){
+      $('#account_form').attr('action', '/registration');
+    });
+  </script>
+  </body>
+</html>

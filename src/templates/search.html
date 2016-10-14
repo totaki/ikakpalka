@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content_lvl_1 %}
+{{ _id }}
+{% if response %}
+  {{ response }}
+{% else %}
+  Пользователя с таким номером не существует
+{% end %}
+{% end %}

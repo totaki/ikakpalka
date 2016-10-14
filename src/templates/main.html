@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content_lvl_1 %}
+<h2>Главня старница</h2>
+<form action="/search" method="get">
+  <input id="search_input" type="text" name="_id" required></input>
+  <button type="submit">Найти</button>
+</form>
+<form method="post" id="account_form">
+  <input id="login_input" type="text" name="email" required></input>
+  <button type="submit" id="btn_login">Войти</button>
+  <button type="submit" id="btn_registration">Регистрация</button>
+</form>
+{% end %}
