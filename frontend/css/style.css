@@ -61,12 +61,11 @@ body {
 .number_loupe>input {
     height: 48px;
     width: 252px;
-    border: none;
+    border-top:2px solid #E8E9ED;
+    border-bottom:2px solid #E8E9ED;
+    border-left: none;
+    border-right: none;
     outline: none;
-}
-
-.number_loupe>input:focus {
-    border: none ;
 }
 
 .number_loupe::before {
@@ -76,8 +75,10 @@ body {
     width: 48px;
     height: 100%;
     background-color: white;
-    left: -24px;
+    left: 0;
     border-radius: 48px 0 0 48px;
+    z-index: -1;
+    border:2px solid #E8E9ED;
 }
 
 .number_loupe::after {
@@ -91,9 +92,11 @@ body {
     top:0;
     border-radius: 0 48px 48px 0;
     z-index: -1;
+    border:2px solid #E8E9ED;
 }
 
 .loupe {
+    border: none;
     position: absolute;
     right: 4px;
     top: 4px;
