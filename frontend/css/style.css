@@ -1,0 +1,12 @@
+body {
+    text-align: center;
+}
+.container {
+    background-color: #67b168;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.info {
+    margin-top: 10%;
+}
