@@ -1,1 +1,30 @@
-
+{% extends "base.html" %}
+{% block content_lvl_1 %}
+<form action="/change" method="post" id="change_form" name="change_form">
+  <input type="hidden" name="_session" value="{{ session }}">
+  <input type="hidden" name="_record" value="{{ record }}">
+  {% for t in types %}
+    {% for i in records.get(t, []) %}
+      <input type="text" name="{{ t }}" value="{{ i }}">
+    {% end %}
+  {% end %}
+</form>
+<input type="text" name="append_record">
+<input type="radio" name="append_type" value="email" checked>
+<input type="radio" name="append_type" value="url">
+<input type="radio" name="append_type" value="facebook">
+<input type="radio" name="append_type" value="vk">
+<button id="append" onclick="append_record();">Добавить</button>
+<input type="submit" form="change_form">
+<script>
+  var append_record = function () {
+    var record = $( "input[name*='append_record']" );
+    var type = $( "input[name*='append_type']:checked" );
+    if (record.val()) {
+      $("#change_form").append('<input type="text" name="'+ type.val() +'" value="'+
+        record.val() +'">');
+      record.val("");
+    }
+  }
+</script>
+{% end %}
