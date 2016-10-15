@@ -40,10 +40,10 @@
                 <div id="contact_url">{{ i }}</div>
               {% end %}
               {% for i in response.get('facebook', []) %}
-                <div id="contact_vk">{{ i }}</div>
+                <div id="contact_fb">{{ i }}</div>
               {% end %}
               {% for i in response.get('vk', []) %}
-                <div id="contact_fb">{{ i }}</div>
+                <div id="contact_vk">{{ i }}</div>
               {% end %}
             {% else %}
               <h4>Пользователя с таким номером не существует</h4>
