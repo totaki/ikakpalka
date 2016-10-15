@@ -26,12 +26,6 @@ html {
     height: 100%;
 }
 
-/*.clearfix::after {*/
-    /*content: "";*/
-    /*display: table;*/
-    /*clear: both;*/
-/*}*/
-
 body {
     margin: 0;
     font-family: "Roboto Regular", sans-serif;
@@ -49,7 +43,9 @@ body {
     background: url("../img/ornament.png") no-repeat bottom right #ffc80a;
 }
 
-.container, .main_container {
+.container,
+.main_container,
+.view_contact_container {
     padding: 0;
     width: 75.937540%;  /* 972px / 1280px */
     height: 100%;
@@ -330,7 +326,7 @@ body {
 
 .view_contact_header {
     height: auto;
-    background: url("") no-repeat bottom center #0cb6cd;
+    background: url("../img/people_2.png") no-repeat bottom center #0cb6cd;
 }
 
 .shape_form_view_contact {
@@ -342,6 +338,35 @@ body {
 
 .contacts_field {
     width: 560px;
-    height: 466px;
+    min-height: 466px;
     background-color: #ffffff;
+    margin: 0 auto;
+    margin-bottom: 196px;
+    margin-top: 56px;
+    padding: 80px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.contacts_field>span {
+    font-family: "Roboto Bold", sans-serif;
+    font-size: 10px;
+    color: #ffc80a;
+    letter-spacing: 2.4px;
+}
+
+#inique_ID {
+    margin-top: 4px;
+    font-size: 36px;
+    color: 212121;
+    letter-spacing: 2.6px;
+    margin-bottom: 28px;
+}
+
+.contacts_field div {
+    margin-bottom: 36px;
+}
+
+.contacts_field div:last-child {
+    margin:0;
 }
