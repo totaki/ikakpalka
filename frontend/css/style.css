@@ -466,17 +466,22 @@ body {
 
 .add_contact {
     width: 240px;
-    height: 35px;
+    height: 139px;
     margin-top: 32px;
     margin-left: 36px;
 }
-
-.add_contact * {
+.add {
+    position: relative;
+}
+.add_contact>.add {
+    display: inline-block;
+}
+.add>button,
+.add_contact>.plus{
     display: inline-block;
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    /*background-color: black;*/
     border: none;
 }
 
@@ -485,6 +490,24 @@ body {
     margin-right: -4px;
     background-color: none;
     background: url("../img/plus.png") no-repeat center center;
+}
+
+.add_contact .save {
+    position: absolute;
+    left: -36px;
+    top: 104px;
+    display: block;
+    width: 156px;
+    height: 48px;
+    border-radius: 48px;
+    border: none;
+    font-family: "Roboto Bold", sans-serif;
+    letter-spacing: 2.4px;
+    font-size: 12px;
+}
+
+.add_contact .save:hover {
+    border: 2px solid #0EBAC5;
 }
 
 .add_email {
@@ -518,3 +541,4 @@ body {
 .add_url:hover {
     background: url("../img/add_url.png");
 }
+
