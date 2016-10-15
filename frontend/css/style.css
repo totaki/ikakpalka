@@ -37,9 +37,6 @@ body {
 
 .header {
     height:100%;
-}
-
-.header {
     background: url("../img/ornament.png") no-repeat bottom right #ffc80a;
 }
 
@@ -324,6 +321,10 @@ body {
 
 /*--- view_contact ---*/
 
+.view_contact_body {
+    height:auto;
+}
+
 .view_contact_header {
     height: auto;
     background: url("../img/people_2.png") no-repeat bottom center #0cb6cd;
@@ -408,4 +409,13 @@ body {
 
 #contact_url::before {
     background: url("../img/url.png") no-repeat center center;
+}
+
+
+
+/*--- edit_contact --- */
+
+.edit_contact_header {
+    height: auto;
+    background: url(../img/people_2.png) no-repeat bottom center #0cb6cd;
 }
