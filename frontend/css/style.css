@@ -32,6 +32,8 @@ body {
     text-align: center;
     height: 100%;
     background-color: #ffc80a;
+    font-size: 16px;
+    min-width: 400px;
 }
 
 .header {
@@ -52,6 +54,35 @@ body {
     float: left;
 }
 
+.shape_form {
+    position: relative;
+    margin: 0 auto;
+    margin-top: 256px;
+    width: 300px;
+}
+
+.shape {
+    position: absolute;
+    right: -184px;
+    top: -153px;
+    background: url("../img/Shape_1.png");
+    width: 200px;
+    height: 121px;
+    color: white;
+    padding-left: 28px;
+    padding-top: 28px;
+}
+
+.shape>p {
+    width: 144px;
+    text-align: left;
+    line-height: 26px;
+}
+
+form {
+
+}
+
 .number_loupe {
     position: relative;
     margin: 0 auto;
@@ -66,6 +97,14 @@ body {
     border-left: none;
     border-right: none;
     outline: none;
+    color: #9FA3A7;
+    font-size: 18px;
+    letter-spacing: 5.6px;
+    padding-left: 20px;
+}
+
+.number_loupe>input:focus {
+    color: #212121;
 }
 
 .number_loupe::before {
@@ -109,6 +148,6 @@ body {
     background: url("../img/search_3.png");
 }
 
-form {
-    margin-top: 255px
+.loupe:focus {
+    outline: none;
 }
