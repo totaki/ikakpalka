@@ -26,6 +26,12 @@ html {
     height: 100%;
 }
 
+/*.clearfix::after {*/
+    /*content: "";*/
+    /*display: table;*/
+    /*clear: both;*/
+/*}*/
+
 body {
     margin: 0;
     font-family: "Roboto Regular", sans-serif;
@@ -43,12 +49,16 @@ body {
     background: url("../img/ornament.png") no-repeat bottom right #ffc80a;
 }
 
-.container {
+.container, .main_container {
     padding: 0;
     width: 75.937540%;  /* 972px / 1280px */
     height: 100%;
     margin: 0 auto;
     padding-top: 1px;
+}
+
+.main_container {
+    height: auto;
 }
 
 .logo {
@@ -319,7 +329,7 @@ body {
 /*--- view_contact ---*/
 
 .view_contact_header {
-    height: 100%;
+    height: auto;
     background: url("") no-repeat bottom center #0cb6cd;
 }
 
@@ -328,4 +338,10 @@ body {
     margin: 0 auto;
     margin-top: 113px;
     width: 300px;
+}
+
+.contacts_field {
+    width: 560px;
+    height: 466px;
+    background-color: #ffffff;
 }
