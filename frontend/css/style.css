@@ -465,15 +465,56 @@ body {
 }
 
 .add_contact {
-    margin-top: 32px;
-    width: 190px;
+    width: 240px;
     height: 35px;
+    margin-top: 32px;
+    margin-left: 36px;
 }
 
-.add_contact>div {
+.add_contact * {
     display: inline-block;
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background-color: black;
+    /*background-color: black;*/
+    border: none;
+}
+
+.add_contact>.plus {
+    margin: 0;
+    margin-right: -4px;
+    background-color: none;
+    background: url("../img/plus.png") no-repeat center center;
+}
+
+.add_email {
+    background: url("../img/add_mail_yellow.png");
+}
+
+.add_email:hover {
+    background: url(../img/add_mail.png);
+}
+
+.add_fb {
+    background: url("../img/add_fb_yellow.png");
+}
+
+.add_fb:hover {
+    background: url("../img/add_fb.png");
+}
+
+.add_vk {
+    background: url("../img/add_vk_yellow.png");
+}
+
+.add_vk:hover {
+    background: url("../img/add_vk.png");
+}
+
+.add_url {
+    background: url("../img/add_url_yellow.png");
+}
+
+.add_url:hover {
+    background: url("../img/add_url.png");
 }
