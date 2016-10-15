@@ -43,12 +43,18 @@ body {
     background: url("../img/ornament.png") no-repeat bottom right #ffc80a;
 }
 
-.container {
+.container,
+.main_container,
+.view_contact_container {
     padding: 0;
     width: 75.937540%;  /* 972px / 1280px */
     height: 100%;
     margin: 0 auto;
     padding-top: 1px;
+}
+
+.main_container {
+    height: auto;
 }
 
 .logo {
@@ -319,6 +325,87 @@ body {
 /*--- view_contact ---*/
 
 .view_contact_header {
-    height: 100%;
-    background: url("") no-repeat bottom center #0cb6cd;
+    height: auto;
+    background: url("../img/people_2.png") no-repeat bottom center #0cb6cd;
+}
+
+.shape_form_view_contact {
+    position: relative;
+    margin: 0 auto;
+    margin-top: 113px;
+    width: 300px;
+}
+
+.contacts_field {
+    width: 560px;
+    min-height: 466px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    margin-bottom: 196px;
+    margin-top: 56px;
+    padding: 80px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .contacts_field {
+        width: 400px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contacts_field {
+        width: 300px;
+        padding: 20px;
+    }
+}
+.contacts_field>span {
+    font-family: "Roboto Bold", sans-serif;
+    font-size: 10px;
+    color: #ffc80a;
+    letter-spacing: 2.4px;
+}
+
+#inique_ID {
+    margin-top: 4px;
+    font-size: 36px;
+    color: 212121;
+    letter-spacing: 2.6px;
+    margin-bottom: 28px;
+}
+
+.contacts_field div {
+    margin-bottom: 36px;
+    padding-left: 36px;
+    position: relative;
+}
+
+.contacts_field div::before {
+    position: absolute;
+    left: 8px;
+    width: 20px;
+    height: 20px;
+    content: "";
+}
+
+.contacts_field div:last-child {
+    margin:0;
+}
+
+#contact_email::before {
+    background: url("../img/mail.png") no-repeat center center;
+}
+
+#contact_fb::before {
+    background: url("../img/facebook.png") no-repeat center center;
+}
+
+#contact_vk::before {
+    background: url("../img/vk.png") no-repeat center center;
+}
+
+#contact_url::before {
+    background: url("../img/url.png") no-repeat center center;
 }
