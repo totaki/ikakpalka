@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>ИКАКПАЛКА</title>
+</head>
+<body>
+<header class="view_contact_header">
+    <div class="container">
+        <div class="logo">
+            <img src="img/logo_yellow.png" alt="">
+        </div>
+        <div class="shape_form">
+            <div class="shape">
+                <p>введите номер контакта</p>
+            </div>
+            <form action="get">
+                <div class="number_loupe">
+                    <input class="enter_number" type="text" id="number" name="number" placeholder="XXX-XXX-XXX">
+                    <button class="find_button loupe" type="submit"></button>
+                </div>
+            </form>
+        </div>
+
+</header>
+</div>
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/jquery.mask.min.js"></script>
+<script>
+    $("#number").mask("999-999-999");
+</script>
+</body>
+</html>
