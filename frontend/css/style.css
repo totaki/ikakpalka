@@ -35,12 +35,12 @@ body {
     min-width: 400px;
 }
 
-.header, .main_content {
+.header {
     height:100%;
 }
 
 .header {
-    background-color: #ffc80a;
+    background: url("../img/ornament.png") no-repeat bottom right #ffc80a;
 }
 
 .container {
@@ -95,7 +95,6 @@ body {
 
 .number_loupe {
     position: relative;
-    margin: 0 auto;
     width: 300px;
     z-index: 1;
 }
@@ -169,6 +168,10 @@ body {
     color: #F05638;
 }
 
+.main_content {
+    height: auto;
+}
+
 .simple_contact {
     text-transform: uppercase;
     font-size: 72px;
@@ -208,6 +211,8 @@ body {
     width:100%;
 }
 
+
+
 .try_text {
     font-size: 20px;
     font-family:"Roboto Bold", sans-serif;
@@ -218,7 +223,7 @@ body {
 
 .try {
     float: left;
-    min-width: 300px;
+    width: 300px;
 }
 
 .try_email .enter_number {
@@ -240,9 +245,12 @@ body {
 }
 
 .email_buttons {
-    margin-top: 10px;
+    margin-top: 34px;
 }
 
+.create_btn_wrapper {
+    padding-left: 0;
+}
 .btn_general {
     width: 132px;
     height: 48px;
@@ -258,6 +266,7 @@ body {
     background-color: #0EBAC5;
     color: #ffffff;
     border: 2px solid transparent;
+    float: left;
 }
 
 .create_btn:hover {
@@ -276,4 +285,26 @@ body {
     background-color: #ffffff;
     color: #8f75be;
     border: 2px solid #8f75be;
+}
+
+.footer {
+    min-height: 224px;
+    background: url("../img/big-red-lollipop.png") no-repeat bottom center;
+}
+
+
+@media (max-width: 768px) {
+    .stick_image {
+        margin-top: 35px;
+    }
+
+    .try_text {
+        text-align: center;
+    }
+
+    .try {
+        float: none;
+        margin: 0 auto;
+    }
+    
 }
