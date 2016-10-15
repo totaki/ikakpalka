@@ -100,7 +100,7 @@ body {
     z-index: 1;
 }
 
-.number_loupe>input {
+.enter_number {
     height: 48px;
     width: 252px;
     border-top:2px solid #E8E9ED;
@@ -114,7 +114,7 @@ body {
     padding-left: 20px;
 }
 
-.number_loupe>input:focus {
+.enter_number:focus {
     color: #212121;
 }
 
@@ -167,4 +167,35 @@ body {
     margin-top: 80px;
     font-size: 14px;
     color: #F05638;
+}
+
+.simple_contact {
+    text-transform: uppercase;
+    font-size: 72px;
+    color: #212121;
+    text-align: left;
+    margin: 0;
+    margin-top: 124px;
+    padding: 0;
+}
+
+.about {
+    margin: 0;
+    margin-top: 54px;
+}
+
+.text_about {
+    padding-left: 0;
+}
+
+.text_about>p {
+    text-align: left;
+    font-size: 14px;
+    color: #212121;
+}
+
+.contacts_options {
+    list-style: none;
+    margin: 0;
+    text-align: left;
 }
