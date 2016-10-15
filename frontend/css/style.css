@@ -417,5 +417,49 @@ body {
 
 .edit_contact_header {
     height: auto;
-    background: url(../img/people_2.png) no-repeat bottom center #0cb6cd;
+    background: url() no-repeat bottom center #8f75be;
+}
+
+.edit_contact_fields {
+    margin-top: 78px;
+    min-height: 500px;
+}
+
+.edit_contact_fields>div {
+    padding-left: 0;
+    position: relative;
+}
+.edit_contact_fields input {
+    width: 372px;
+    height: 44px;
+    border-radius: 5px;
+    padding-left: 36px;
+    outline: none;
+    border: 1px solid #E6E6E6;
+    background-color: #FAFAFA;
+}
+
+.contact>input+.sign {
+    position: absolute;
+    display: block;
+    width: 20px;
+    height: 44px;
+    top: 0;
+    left: 0;
+}
+
+#email+.sign {
+    background: url("../img/mail.png") no-repeat center center;
+}
+
+#fb+.sign {
+    background: url("../img/facebook.png") no-repeat center center;
+}
+
+#vk+.sign {
+    background: url("../img/vk.png") no-repeat center center;
+}
+
+#url+.sign {
+    background: url("../img/url.png") no-repeat center center;
 }
