@@ -299,7 +299,7 @@ if __name__ == "__main__":
         (r'/login', LoginHandler),
         (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': './static/'}),
 
-    ], debug=False, template_path='./templates/')
+    ], debug=True, template_path='./templates/')
     application.listen(10000)
     tornado.ioloop.IOLoop.current().start()
 
