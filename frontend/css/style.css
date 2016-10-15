@@ -73,14 +73,20 @@ body {
     padding-top: 28px;
 }
 
+@media (max-width: 700px) {
+    .shape {
+        display: none;
+    }
+
+    .shape_form {
+        margin-top: 128px;
+    }
+}
+
 .shape>p {
     width: 144px;
     text-align: left;
     line-height: 26px;
-}
-
-form {
-
 }
 
 .number_loupe {
@@ -150,4 +156,10 @@ form {
 
 .loupe:focus {
     outline: none;
+}
+
+.users_amount {
+    margin-top: 80px;
+    font-size: 14px;
+    color: #F05638;
 }
