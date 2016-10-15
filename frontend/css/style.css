@@ -383,7 +383,7 @@ body {
     position: relative;
 }
 
-.contacts_field div::before {
+.contacts_field>div::before {
     position: absolute;
     left: 8px;
     width: 20px;
@@ -424,6 +424,24 @@ body {
     margin-top: 78px;
     min-height: 500px;
 }
+.contact {
+    position: relative;
+}
+.contact .delete_contact {
+    position: absolute;
+    padding-left: 0;
+    right: 0;
+    top: 15px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: url("../img/close_see.png");
+}
+
+.delete_contact:hover {
+    background: url("../img/close_un.png");
+    cursor: pointer;
+}
 
 .edit_contact_fields>div {
     padding-left: 0;
@@ -432,11 +450,24 @@ body {
 .edit_contact_fields input {
     width: 372px;
     height: 44px;
+    font-size: 14px;
     border-radius: 5px;
     padding-left: 36px;
     outline: none;
     border: 1px solid #E6E6E6;
     background-color: #FAFAFA;
+}
+
+@media (max-width: 768px) {
+    .edit_contact_fields input {
+        width: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    .edit_contact_fields input {
+        width: 200px;
+    }
 }
 
 .contact>input+.sign {
