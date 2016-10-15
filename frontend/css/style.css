@@ -197,5 +197,41 @@ body {
 .contacts_options {
     list-style: none;
     margin: 0;
+    padding-left: 0;
+    font-size: 14px;
     text-align: left;
+}
+
+.stick_image>img {
+    width:100%;
+}
+
+.try_text {
+    font-size: 20px;
+    font-family:"Roboto Bold", sans-serif;
+    color: #F05638;
+    text-align: left;
+}
+
+.try {
+    float: left;
+    min-width: 300px;
+}
+
+.try_email .enter_number {
+    border-top-color: #FFC80A;
+    border-bottom-color: #FFC80A;
+    font-size: 14px;
+    padding-left: 6px;
+    letter-spacing: 0;
+}
+.try_email::before {
+    border-color: #FFC80A;
+}
+.try_email::after {
+    border-color: #FFC80A;
+}
+
+.row {
+    margin: 0;
 }
