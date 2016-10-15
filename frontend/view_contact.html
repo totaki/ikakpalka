@@ -9,26 +9,31 @@
     <link rel="stylesheet" href="css/style.css">
     <title>ИКАКПАЛКА</title>
 </head>
-<body>
-<header class="view_contact_header">
-    <div class="container">
+<body class="view_contact_body">
+<header class="view_contact_header clearfix">
+    <div class="view_contact_container">
         <div class="logo">
             <img src="img/logo_yellow.png" alt="">
         </div>
-        <div class="shape_form">
-            <div class="shape">
-                <p>введите номер контакта</p>
-            </div>
-            <form action="get">
+        <div class="shape_form_view_contact">
+            <form action="/" method="get">
                 <div class="number_loupe">
                     <input class="enter_number" type="text" id="number" name="number" placeholder="XXX-XXX-XXX">
                     <button class="find_button loupe" type="submit"></button>
                 </div>
             </form>
         </div>
-
+        <section class="contacts_field">
+            <span>номер контакта</span>
+            <h3 id="inique_ID">123-123-123</h3>
+            <div id="contact_email">nikolanidvora@yandex.ru</div>
+            <div id="contact_fb">facebook.com/fatnomass.po</div>
+            <div id="contact_vk">vk.com/hollyfish</div>
+            <div id="contact_url">икакпалка.рф</div>
+        </section>
+    </div>
 </header>
-</div>
+
 <script src="js/jquery-3.1.1.min.js"></script>
 <script src="js/jquery.mask.min.js"></script>
 <script>
