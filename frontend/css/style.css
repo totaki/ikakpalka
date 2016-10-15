@@ -365,8 +365,34 @@ body {
 
 .contacts_field div {
     margin-bottom: 36px;
+    padding-left: 36px;
+    position: relative;
+}
+
+.contacts_field div::before {
+    position: absolute;
+    left: 8px;
+    width: 20px;
+    height: 20px;
+    content: "";
 }
 
 .contacts_field div:last-child {
     margin:0;
+}
+
+#contact_email::before {
+    background: url("../img/mail.png") no-repeat center center;
+}
+
+#contact_fb::before {
+    background: url("../img/facebook.png") no-repeat center center;
+}
+
+#contact_vk::before {
+    background: url("../img/vk.png") no-repeat center center;
+}
+
+#contact_url::before {
+    background: url("../img/url.png") no-repeat center center;
 }
