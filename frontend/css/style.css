@@ -183,6 +183,10 @@ body {
     padding: 0;
 }
 
+.row {
+    margin: 0;
+}
+
 .about {
     margin: 0;
     margin-top: 54px;
@@ -240,9 +244,7 @@ body {
     border-color: #FFC80A;
 }
 
-.row {
-    margin: 0;
-}
+
 
 .email_buttons {
     margin-top: 34px;
