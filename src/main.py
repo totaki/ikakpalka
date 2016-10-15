@@ -64,9 +64,10 @@ def _change_record(record, dct):
 
 
 @gen.coroutine 
-def _create_session(record, dt):
+def _create_session(record, dt, session=None):
     try:
-        session = uuid.uuid4().hex
+        if not session:
+            session = uuid.uuid4().hex
         response = yield httpclient.AsyncHTTPClient().fetch(
             DB_SESSIONS + session, method='PUT', 
             headers={'Content-Type': 'application/json'},
@@ -185,7 +186,7 @@ class SearchHandler(BaseHandler):
             response = yield self._get_records(_id)
             if response != False:
                 self.render('search.html', _id=_id, 
-                            response=self._prepare_json(response)
+                            response=self._prepare_json(response),
                 )
                 err = None
         else:
