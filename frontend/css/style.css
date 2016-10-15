@@ -621,16 +621,34 @@ body {
     margin-top: 80px;
 }
 
-.error_header {
+.error_header_400,
+.error_header_403,
+.error_header_404,
+.error_header_500 {
     height: 880px;
     background: url("../img/400.png") no-repeat bottom center;
+}
+
+.error_header_403 {
+    background: url("../img/403.png") no-repeat bottom center;
+}
+
+.error_header_404 {
+    background: url("../img/404.png") no-repeat bottom center;
+}
+
+.error_header_500 {
+    background: url("../img/500.png") no-repeat bottom center;
 }
 
 @media (max-width: 480px) {
     .container {
         width: 90%;
     }
-    .error_header {
+    .error_header_400,
+    .error_header_403,
+    .error_header_404,
+    .error_header_500 {
         background-size: 95%;
     }
 }
