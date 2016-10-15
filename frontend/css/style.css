@@ -391,7 +391,7 @@ body {
     content: "";
 }
 
-.contacts_field div:last-child {
+.contacts_field>div:last-child {
     margin:0;
 }
 
@@ -462,4 +462,18 @@ body {
 
 #url+.sign {
     background: url("../img/url.png") no-repeat center center;
+}
+
+.add_contact {
+    margin-top: 32px;
+    width: 190px;
+    height: 35px;
+}
+
+.add_contact>div {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: black;
 }
