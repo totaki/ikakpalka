@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>ИКАКПАЛКА</title>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <img src="img/logo_yellow.png" alt="">
+        </div>
+        <div class="shape_form">
+            <div class="shape">
+                <p>введите номер контакта</p>
+            </div>
+            <form action="get">
+                 <div class="number_loupe">
+                    <input class="enter_number" type="text" id="number" name="number" placeholder="XXX-XXX-XXX">
+                    <button class="find_button loupe" type="submit"></button>
+                </div>
+            </form>
+        </div>
+        <div class="users_amount">
+            Пользователей &ndash; <span id="reg">34</span>
+        </div>
+</header>
+<main class="main_content">
+    <div class="container">
+        <div class="logo">
+            <img src="img/logo_white.png" alt="">
+        </div>
+        <h2 class="simple_contact">простой контакт</h2>
+        <div class="row about">
+            <div class="col-sm-5 text_about">
+                <p>h как русская Н... <br>
+                s как доллар... <br>
+                i как палка... (пример рисунок 9) <br>
+                Как часто вы диктовали свои контакты в Интернете, объясняя каждую латинскую букву? <br>
+                </p>
+
+                <p>Мы предлагаем вам больше никогда не заниматься расшифровкой латиницы. Просто получите уникальный цифровой код в нашем сервисе и продиктуйте его вашему важному контакту (заказчику, секретарю заказчика, бабушке, дедушке, внучке, жучке, кошке, мышке, репке).
+                </p>
+
+                <p>Регистрация на сайте бесплатна. После регистрации получите  уникальный номер на нашем сайте, к которому вы можете привязать свои контакты:</p>
+                <ul class="contacts_options">
+                    <li>- личный/корпоративный сайт</li>
+                    <li>- страницы в социальных сетях</li>
+                    <li>- e-mail</li>
+                    <li>- skype, telegram, slack и т.д.</li>
+                </ul>
+            </div>
+            <div class="col-sm-7 stick_image">
+                <img src="img/note2.png" alt="">
+            </div>
+        </div>
+        <p class="try_text">Poprobuy, eto prosto!</p>
+        <form class="try" action="get">
+            <div class="number_loupe try_email">
+                <input class="enter_number" type="text" id="email" name="email" placeholder="E-mail">
+            </div>
+            <div class="row email_buttons">
+                <div class="col-sm-6 create_btn_wrapper">
+                    <button class="create_btn btn_general">СОЗДАТЬ</button>
+                </div>
+                <div class="col-sm-6 enter_btn_wrapper">
+                    <button class="enter_btn btn_general">ВОЙТИ</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+<footer class="footer">
+
+</footer>
+
+
+</div>
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/jquery.mask.min.js"></script>
+<script>
+    $("#number").mask("999-999-999");
+</script>
+</body>
+</html>
