@@ -348,6 +348,19 @@ body {
     text-align: left;
 }
 
+@media (max-width: 768px) {
+    .contacts_field {
+        width: 400px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contacts_field {
+        width: 300px;
+        padding: 20px;
+    }
+}
 .contacts_field>span {
     font-family: "Roboto Bold", sans-serif;
     font-size: 10px;
