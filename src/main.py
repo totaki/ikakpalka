@@ -23,14 +23,26 @@ DB_BASE_URL = 'http://local.ikp:5984/'
 DB_RECORDS = DB_BASE_URL + 'ikp_records/'
 DB_USERS = DB_BASE_URL + 'ikp_users/'
 DB_SESSIONS = DB_BASE_URL + 'ikp_sessions/'
+DB_REGISTRATIONS = DB_BASE_URL + 'ikp_registrations/'
 QUERY = '_id'
 ID_REGEX = r'\d{9}'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
 
 
-def _closed_date(dt):
-    return (dt + datetime.timedelta(seconds=600)).timestamp()
+def _closed_date(dt, seconds):
+    return (dt + datetime.timedelta(seconds=seconds)).timestamp()
+
+
+def _send_email(email, subject, text):
+    msg = MIMEText(text)
+    msg['Subject'] = subject
+    msg['From'] = EMAIL_USER
+    msg['To'] = email
+    s = smtplib.SMTP_SSL(EMAIL_HOST, EMAIL_PORT)
+    s.login(EMAIL_USER, EMAIL_PASSWORD)
+    s.send_message(msg)
+    s.quit()
 
 
 @gen.coroutine    
@@ -38,6 +50,42 @@ def _get_user(email):
     try:
         response = yield httpclient.AsyncHTTPClient().fetch(
             DB_USERS + str(email)
+        )
+    except httpclient.HTTPError as err:
+        if err.code == 404:
+            response = None
+        else:
+            response = False
+    raise gen.Return(response)
+
+
+@gen.coroutine 
+def _create_user(email, record=None):
+    try:
+        if not record:
+            record = yield _get_next_id() 
+        response = yield httpclient.AsyncHTTPClient().fetch(
+            DB_USERS + email, method='PUT', 
+            headers={'Content-Type': 'application/json'},
+            body=json.dumps({'record': record}).encode('utf-8')
+        )
+        response = record
+    except httpclient.HTTPError as err:
+        if err.code == 404:
+            response = None
+        else:
+            response = False
+    raise gen.Return(response)
+
+
+@gen.coroutine 
+def _create_records(record):
+    try:
+        dct = dict((i, []) for i in RECORDS_TYPES)
+        response = yield httpclient.AsyncHTTPClient().fetch(
+            DB_RECORDS + record, method='PUT', 
+            headers={'Content-Type': 'application/json'},
+            body=json.dumps(dct).encode('utf-8')
         )
     except httpclient.HTTPError as err:
         if err.code == 404:
@@ -66,6 +114,7 @@ def _change_record(record, dct):
 @gen.coroutine 
 def _create_session(record, dt, session=None):
     try:
+        #import pdb;pdb.set_trace()
         if not session:
             session = uuid.uuid4().hex
         response = yield httpclient.AsyncHTTPClient().fetch(
@@ -124,15 +173,93 @@ def _check_auth(session, record):
             return check
 
 
-def _send_email(email, subject, text):
-    msg = MIMEText(text)
-    msg['Subject'] = subject
-    msg['From'] = EMAIL_USER
-    msg['To'] = email
-    s = smtplib.SMTP_SSL(EMAIL_HOST, EMAIL_PORT)
-    s.login(EMAIL_USER, EMAIL_PASSWORD)
-    s.send_message(msg)
-    s.quit()
+@gen.coroutine
+def _get_next_id():
+    response = yield httpclient.AsyncHTTPClient().fetch(
+        DB_USERS
+    )
+    data = json.loads(response.body.decode('utf-8'))
+    i = int(data['doc_count']) + 1000
+    zeros = '0' * (9 - len(str(i)))
+    raise gen.Return(zeros + str(i))
+
+
+@gen.coroutine 
+def _delete_registration(email, rev):
+    try:
+        response = yield httpclient.AsyncHTTPClient().fetch(
+            DB_REGISTRATIONS + email + '?rev=' + rev, method='DELETE', 
+        )
+    except httpclient.HTTPError as err:
+        if err.code == 404:
+            response = None
+        else:
+            response = False
+    raise gen.Return(response)
+
+
+@gen.coroutine 
+def _get_registration(email):
+    try:
+        response = yield httpclient.AsyncHTTPClient().fetch(
+            DB_REGISTRATIONS + email
+        )
+    except httpclient.HTTPError as err:
+        if err.code == 404:
+            response = None
+        else:
+            response = False
+    raise gen.Return(response)
+
+
+@gen.coroutine 
+def _create_registration(email, dt, session=None):
+    try:
+        if not session:
+            session = uuid.uuid4().hex
+        response = yield httpclient.AsyncHTTPClient().fetch(
+            DB_REGISTRATIONS + email, method='PUT', 
+            headers={'Content-Type': 'application/json'},
+            body=json.dumps({'session': session, 'date': dt}).encode('utf-8')
+        )
+        response = session
+    except httpclient.HTTPError as err:
+        if err.code == 404:
+            response = None
+        else:
+            response = False
+    raise gen.Return(response)
+
+
+@gen.coroutine 
+def _check_registration(data):
+    response = None
+    dct = json.loads(data.body.decode('utf-8'))
+    cur_dt = datetime.datetime.utcnow()
+    s_dt = datetime.datetime.fromtimestamp(float(dct['date']))
+    if (s_dt - cur_dt).days < 0:
+        (yield _delete_registration(dct['_id'], dct['_rev']))
+    else:
+        response = dct['session']
+    raise gen.Return(response)
+
+
+registration_text = 'Для продолжения пройдите по следующей ссылке, она же \
+является входом в ваш аккаунт в течени 10 минут \n\n{}\n\nКоманда икакпалка.рф'
+
+
+@gen.coroutine 
+def _create_new_user(email):
+    new_reg = yield _create_registration(
+        email,
+        _closed_date(datetime.datetime.utcnow(), 600)
+    )
+    link = '{}/registration?&_session={}&_email={}'.format(
+        BASE_URL, new_reg, email
+    )
+    _send_email(email, 'Регистрация на сервисе икакпалка.рф',
+                registration_text.format(link) 
+    )
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -196,16 +323,6 @@ class SearchHandler(BaseHandler):
             self.render_error(*err)        
 
 
-class RegistrationHandler(tornado.web.RequestHandler):
-
-    def get(self):
-        self.write("Hello, world")
-
-    @gen.coroutine    
-    def post(self):
-        self.write("Hello, world")
-
-
 class ChangeHandler(BaseHandler):
     
     @gen.coroutine    
@@ -253,6 +370,67 @@ class ChangeHandler(BaseHandler):
             self.write("Invalid login")
 
 
+class RegistrationHandler(ChangeHandler):
+
+    @gen.coroutine    
+    def get(self):
+        session = self.get_query_argument('_session', None)
+        email = self.get_query_argument('_email', None)
+        if session and email:
+            usr = yield _get_user(email)
+            if usr:
+                ust_dat = json.loads(usr.body.decode('utf-8'))
+                reg = yield _get_registration(email)
+                if reg:
+                    chk_reg = yield _check_registration(reg)
+                    if chk_reg:
+                        self.redirect('/change?_session={}&_record={}'.format(
+                            str(chk_reg), str(ust_dat['record'])
+                        ))
+                    else:
+                        self.render_error(403, 'Forbidden')
+                else:
+                    self.render_error(403, 'Forbidden')
+            else:
+                reg = yield _get_registration(email)
+                if reg:
+                    chk_reg = yield _check_registration(reg)
+                    if chk_reg:
+                        user = yield _create_user(email) 
+                        records = yield _create_records(str(user)) 
+                        dt = _closed_date(datetime.datetime.utcnow(), 600)
+                        session = yield _create_session(user, dt, session=session)
+                        self.redirect('/change?_session={}&_record={}'.format(
+                            str(session), str(user)
+                        ))
+                    else:
+                        self.render_error(403, 'Forbidden')
+                else:
+                    self.render_error(403, 'Forbidden')
+        else:
+            self.render_error(400, 'Bad request')
+
+    @gen.coroutine    
+    def post(self):
+        err = (400, 'Bad request')
+        email = self.get_body_argument('email', default=None)
+        user = yield _get_user(email)
+        reg = yield _get_registration(email)
+        if email and not user and not reg:
+            _create_new_user(email)
+            self.write('Send you to email 1')
+        elif reg:
+            check_reg = yield _check_registration(reg)
+            if check_reg:
+                self.write('На ваш email ранее был отправлен email c сылкой для \
+регистарции')
+            else:
+                _create_new_user(email)
+                self.write('Send you to email')
+        elif user:
+            self.write("Такой email уже используется")
+
+
 class LoginHandler(BaseHandler):
 
     _page_text = 'На ваш почтовый ящик отправленна ссылка для входа' 
@@ -264,7 +442,7 @@ class LoginHandler(BaseHandler):
             BASE_URL, session, record
         )
         text = 'Вам выслана ссылка которая по который вы можете внести \
-изменения в течении 5 минут с момента получения\n\n{}\n\nКоманда \
+изменения в течении 10 минут с момента получения\n\n{}\n\nКоманда \
 икакпалка.рф'.format(link)
         return text
 
@@ -277,7 +455,7 @@ class LoginHandler(BaseHandler):
             user = yield _get_user(email)
             if user:
                 user_data = json.loads(user.body.decode('utf-8'))
-                dt = _closed_date(datetime.datetime.utcnow())
+                dt = _closed_date(datetime.datetime.utcnow(), 600)
                 session = yield _create_session(user_data['record'], dt)
                 if session:
                     _send_email(
@@ -285,7 +463,9 @@ class LoginHandler(BaseHandler):
                         self._get_login_text(session, user_data['record'])
                     )
                     text = self._page_text
-            self.render('account.html', text=text)
+                self.render('account.html', text=text)
+            else:
+                self.redirect('/')
         else:
             self.render_error(*err)
 
