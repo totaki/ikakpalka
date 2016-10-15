@@ -1,6 +1,21 @@
-{% extends "base.html" %}
-{% block content_lvl_1 %}
-<header class="view_contact_header">
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>ИКАКПАЛКА</title>
+    <style>
+      input:required {
+        box-shadow:none;
+      }
+    </style>
+</head>
+<body class="view_contact_body">
+<header class="view_contact_header clearfix">
     <div class="view_contact_container">
         <div class="logo">
            <a href="/"><img src="/static/img/logo_yellow.png" alt=""></a>
@@ -36,4 +51,10 @@
         </section>
     </div>
 </header>
-{% end %}
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/jquery.mask.min.js"></script>
+<script>
+    $("#search_input").mask("999-999-999");
+</script>
+</body>
+</html>
