@@ -176,6 +176,8 @@ body {
     text-align: left;
     margin: 0;
     margin-top: 124px;
+    margin-left: -4px;
+    margin-bottom: 56px;
     padding: 0;
 }
 
@@ -211,6 +213,7 @@ body {
     font-family:"Roboto Bold", sans-serif;
     color: #F05638;
     text-align: left;
+    margin-bottom: 24px;
 }
 
 .try {
@@ -234,4 +237,43 @@ body {
 
 .row {
     margin: 0;
+}
+
+.email_buttons {
+    margin-top: 10px;
+}
+
+.btn_general {
+    width: 132px;
+    height: 48px;
+    border-radius: 48px;
+    border: none;
+}
+
+.btn_general:focus {
+    outline: none;
+}
+
+.create_btn {
+    background-color: #0EBAC5;
+    color: #ffffff;
+    border: 2px solid transparent;
+}
+
+.create_btn:hover {
+    background-color: #ffffff;
+    border: 2px solid #0EBAC5;
+    color:  #0EBAC5;
+}
+
+.enter_btn {
+    background-color: #8f75be;
+    color: #ffffff;
+    border: 2px solid transparent;
+}
+
+.enter_btn:hover {
+    background-color: #ffffff;
+    color: #8f75be;
+    border: 2px solid #8f75be;
 }
