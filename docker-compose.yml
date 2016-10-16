@@ -20,6 +20,16 @@ services:
       - ./src/:/app
     ports:
       - "10000:10000"
+  bal:
+    build:
+      context: ./
+    image: ikakpalka:0.1
+    container_name: local.ikp.bal
+    command: python -m main
+    volumes:
+      - ./src/:/app
+    ports:
+      - "10000:10001"
   nginx:
     image: nginx:1.10
     container_name: local.ikp.nginx
