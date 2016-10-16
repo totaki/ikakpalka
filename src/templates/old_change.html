@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +8,11 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
     <title>ИКАКПАЛКА</title>
+    <style>
+      input:required {
+        box-shadow:none;
+      }
+    </style>
 </head>
 <body class="view_contact_body">
 <header class="edit_contact_header clearfix">
@@ -54,34 +58,32 @@
                   <div class="delete_contact"></div>
               </div>
               {% end %}
-           </form>
             <div class="add_contact">
                 <div class="plus"></div>
-                <div class="add">
-                    <button class="add_email" onclick="append_field('email');"></button>
-                    <button class="add_fb" onclick="append_field('facebook');"></button>
-                    <button class="add_vk" onclick="append_field('vk');"></button>
-                    <button class="add_url" onclick="append_field('url');"></button>
-                    <button class="save create_btn btn_general" type="submit" form="change_form">СОХРАНИТЬ</button>
+                <div class="add" method="get">
+                    <button class="add_email"></button>
+                    <button class="add_fb"></button>
+                    <button class="add_vk"></button>
+                    <button class="add_url"></button>
+                    <button class="save create_btn btn_general">СОХРАНИТЬ</button>
                 </div>
             </div>
-
+          </form>
         </section>
 
 </header>
 <script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/jquery.mask.min.js"></script>
 <script>
-  var form = $('#change_form');
-  var append_field = function(type) {
-    var style = type;
-    if (type=='facebook') {
-      style = 'fb';
+ var append_record = function () {
+    var record = $( "input[name*='append_record']" );
+    var type = $( "input[name*='append_type']:checked" );
+    if (record.val()) {
+      $("#change_form").append('<input type="text" name="'+ type.val() +'" value="'+
+        record.val() +'">');
+      record.val("");
     }
-    form.append('<div class="contact"><input type="input" id="'+ style +'" name="'+ type + '" reqiured><div class="sign"></div><div class="delete_contact"></div></div>');
   }
-  $( document ).on( "click", function( event ) {
-    $( event.target ).closest( ".delete_contact" ).parent().remove();
-  });
 </script>
 </body>
 </html>
