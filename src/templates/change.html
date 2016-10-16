@@ -23,7 +23,7 @@
               <input type="hidden" name="_session" value="{{ session }}">
               <input type="hidden" name="_record" value="{{ record }}">
               {% for i in records.get('email', []) %}
-              <div class="contact">
+              <div class="contact" style="padding-left: 0;">
                   <input type="input" id="email" name="email" value="{{ i }}"
                   required>
                   <div class="sign"></div>
@@ -31,7 +31,7 @@
               </div>
               {% end %}
               {% for i in records.get('url', []) %}
-              <div class="contact">
+              <div class="contact" style="padding-left: 0;">
                   <input type="input" id="url" name="url" value="{{ i }}"
                   required>
                   <div class="sign"></div>
@@ -39,7 +39,7 @@
               </div>
               {% end %}
               {% for i in records.get('facebook', []) %}
-              <div class="contact">
+              <div class="contact" style="padding-left: 0;">
                   <input type="input" id="fb" name="facebook" value="{{ i }}"
                   reqiured>
                   <div class="sign"></div>
@@ -47,7 +47,7 @@
               </div>
               {% end %}
               {% for i in records.get('vk', []) %}
-              <div class="contact">
+              <div class="contact" style="padding-left: 0;">
                   <input type="input" id="vk" name="vk" value="{{ i }}"
                   required>
                   <div class="sign"></div>
