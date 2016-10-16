@@ -650,3 +650,32 @@ body {
         background-size: 95%;
     }
 }
+
+/*--- INFO ---*/
+
+.info_text {
+    margin: 0 auto;
+    margin-top: 180px;
+    width: 415px;
+    color: #212121;
+    line-height: 32px;
+    font-size: 24px;
+}
+
+.to_index {
+    display: block;
+    line-height: 48px;
+    margin-top: 56px;
+    font-family: "Roboto Bold", sans-serif;
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    width: 148px;
+}
+
+.to_index:hover {
+    text-decoration: none;
+}
+
+.men_stick {
+    margin-top: 80px;
+}
