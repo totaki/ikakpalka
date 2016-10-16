@@ -19,26 +19,31 @@
         <section class="contacts_field edit_contact_fields">
             <span>номер контакта</span>
             <h3 id="inique_ID">123-123-123</h3>
-            <div class="contact">
-                <input type="input" id="email" name="email" placeholder="nikolanidvora@yandex.ru">
-                <div class="sign"></div>
-                <div class="delete_contact"></div>
-            </div>
-            <div class="contact">
-                <input type="input" id="fb" name="fb" placeholder="facebook.com/fatnomass.po">
-                <div class="sign"></div>
-                <div class="delete_contact"></div>
-            </div>
-            <div class="contact">
-                <input type="input" id="vk" name="vk" placeholder="vk.com/hollyfish">
-                <div class="sign"></div>
-                <div class="delete_contact"></div>
-            </div>
-            <div class="contact">
-                <input type="input" id="url" name="url" placeholder="икакпалка.рф">
-                <div class="sign"></div>
-                <div class="delete_contact"></div>
-            </div>
+            <form action="/change" method="post" id="change_form" name="change_form">
+                <input type="hidden" name="_session" value="757b3fd24ad1445d857581bd7518da27">
+                <input type="hidden" name="_record" value="000001002">
+
+                <div class="contact">
+                    <input type="input" id="email" name="email" placeholder="nikolanidvora@yandex.ru">
+                    <div class="sign"></div>
+                    <div class="delete_contact"></div>
+                </div>
+                <div class="contact">
+                    <input type="input" id="fb" name="fb" placeholder="facebook.com/fatnomass.po">
+                    <div class="sign"></div>
+                    <div class="delete_contact"></div>
+                </div>
+                <div class="contact">
+                    <input type="input" id="vk" name="vk" placeholder="vk.com/hollyfish">
+                    <div class="sign"></div>
+                    <div class="delete_contact"></div>
+                </div>
+                <div class="contact">
+                    <input type="input" id="url" name="url" placeholder="икакпалка.рф">
+                    <div class="sign"></div>
+                    <div class="delete_contact"></div>
+                </div>
+            </form>
             <div class="add_contact">
                 <div class="plus"></div>
                 <form class="add" method="get">

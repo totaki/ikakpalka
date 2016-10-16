@@ -443,7 +443,7 @@ body {
     cursor: pointer;
 }
 
-.edit_contact_fields>div {
+.edit_contact_fields .contact {
     padding-left: 0;
     position: relative;
 }
@@ -573,7 +573,7 @@ body {
     background: url("../img/add_url.png");
 }
 
-/*--- 400 ---*/
+/*--- ERRORS ---*/
 
 .number_wrapper {
     margin: 0 auto;
