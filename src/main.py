@@ -334,7 +334,7 @@ class SearchHandler(BaseHandler):
             err = (400, 'Bad request')
 
         if err:
-            self.render_error(*err)        
+            self.render('500.html')
 
 
 class ChangeHandler(BaseHandler):
@@ -410,9 +410,9 @@ class RegistrationHandler(ChangeHandler):
                             str(chk_reg), str(ust_dat['record'])
                         ))
                     else:
-                        self.render_error(403, 'Forbidden')
+                        self.render('403.html')
                 else:
-                    self.render_error(403, 'Forbidden')
+                    self.render('403.html')
             else:
                 reg = yield _get_registration(email)
                 if reg:
@@ -426,11 +426,11 @@ class RegistrationHandler(ChangeHandler):
                             str(session), str(user)
                         ))
                     else:
-                        self.render_error(403, 'Forbidden')
+                        self.render('403.html')
                 else:
-                    self.render_error(403, 'Forbidden')
+                    self.render('403.html')
         else:
-            self.render_error(400, 'Bad request')
+            self.render('403.html')
 
     @gen.coroutine    
     def post(self):
@@ -511,8 +511,14 @@ class LoginHandler(BaseHandler):
                 gif=_random_gif()
             )
         else:
-            self.render_error(*err)
+            self.render('400.html')
 
+
+class NotFoundHandler(tornado.web.RequestHandler):
+
+    @gen.coroutine
+    def get(self, path):
+        self.render('404.html')
 
 
 if __name__ == "__main__":
@@ -523,6 +529,7 @@ if __name__ == "__main__":
         (r'/change', ChangeHandler),
         (r'/login', LoginHandler),
         (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': './static/'}),
+        (r'/(.*)', NotFoundHandler),
 
     ], debug=False, template_path='./templates/')
     application.listen(10000)
