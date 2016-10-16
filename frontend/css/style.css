@@ -441,7 +441,7 @@ body {
     cursor: pointer;
 }
 
-.edit_contact_fields>div {
+.edit_contact_fields .contact {
     padding-left: 0;
     position: relative;
 }
@@ -571,7 +571,7 @@ body {
     background: url("../img/add_url.png");
 }
 
-/*--- 400 ---*/
+/*--- ERRORS ---*/
 
 .number_wrapper {
     margin: 0 auto;
@@ -649,4 +649,33 @@ body {
     .error_header_500 {
         background-size: 95%;
     }
+}
+
+/*--- INFO ---*/
+
+.info_text {
+    margin: 0 auto;
+    margin-top: 180px;
+    width: 415px;
+    color: #212121;
+    line-height: 32px;
+    font-size: 24px;
+}
+
+.to_index {
+    display: block;
+    line-height: 48px;
+    margin-top: 56px;
+    font-family: "Roboto Bold", sans-serif;
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    width: 148px;
+}
+
+.to_index:hover {
+    text-decoration: none;
+}
+
+.men_stick {
+    margin-top: 80px;
 }
