@@ -1,5 +1,6 @@
 import datetime
 import json
+import random
 import re
 import smtplib
 import tornado.ioloop
@@ -32,6 +33,10 @@ EMAIL_PORT = 465
 
 def _closed_date(dt, seconds):
     return (dt + datetime.timedelta(seconds=seconds)).timestamp()
+
+
+def _random_gif():
+  return random.choice([1,2])
 
 
 def _send_email(email, subject, text):
@@ -362,7 +367,11 @@ class ChangeHandler(BaseHandler):
                         records=dct, types=RECORDS_TYPES
                         )
         else:
-            self.write("Invalid login")
+            self.render(
+                'info.html', 
+                message='Сессия не существует или не активна.',
+                gif=_random_gif()
+            )
             
 
     @gen.coroutine    
@@ -376,7 +385,11 @@ class ChangeHandler(BaseHandler):
             (yield _change_record(user[1], dct))
             self.redirect(BASE_URL + '/search?_id=' + str(user[1]))
         else:
-            self.write("Invalid login")
+            self.render(
+                'info.html', 
+                message='Пользователя не существут',
+                gif=_random_gif()
+            )
 
 
 class RegistrationHandler(ChangeHandler):
@@ -427,17 +440,37 @@ class RegistrationHandler(ChangeHandler):
         reg = yield _get_registration(email)
         if email and not user and not reg:
             _create_new_user(email)
+            self.render(
+                'info.html', 
+                message='На ваш email отправлено письмо с дальнейшими \
+иструкциями.',
+                gif=_random_gif()
+            )
             self.write('Send you to email 1')
         elif reg and not user:
             check_reg = yield _check_registration(reg)
             if check_reg:
-                self.write('На ваш email ранее был отправлен email c сылкой для \
-регистарции')
+                self.render(
+                    'info.html', 
+                    message='На ваш email ранее был отправлено письмо c сылкой для \
+регистарции',
+                    gif=_random_gif()
+                )
+                self.write('')
             else:
                 _create_new_user(email)
-                self.write('Send you to email')
+                self.render(
+                    'info.html', 
+                    message='На ваш email отправлено письмо с дальнейшими \
+иструкциями.',
+                    gif=_random_gif()
+                )
         elif user:
-            self.write("Такой email уже используется")
+            self.render(
+                'info.html', 
+                message='Такой email уже используется.',
+                gif=_random_gif()
+            )
 
 
 class LoginHandler(BaseHandler):
@@ -472,9 +505,11 @@ class LoginHandler(BaseHandler):
                         self._get_login_text(session, user_data['record'])
                     )
                     text = self._page_text
-                self.render('account.html', text=text)
-            else:
-                self.redirect('/')
+            self.render(
+                'info.html', 
+                message=text,
+                gif=_random_gif()
+            )
         else:
             self.render_error(*err)
 
@@ -489,7 +524,7 @@ if __name__ == "__main__":
         (r'/login', LoginHandler),
         (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': './static/'}),
 
-    ], debug=False, template_path='./templates/')
+    ], debug=True, template_path='./templates/')
     application.listen(10000)
     tornado.ioloop.IOLoop.current().start()
 
