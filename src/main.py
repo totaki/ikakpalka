@@ -285,8 +285,17 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainHandler(BaseHandler):
 
+
+    @gen.coroutine    
+    def _get_records_count(self):
+        response = yield httpclient.AsyncHTTPClient().fetch(DB_RECORDS)
+        dat = json.loads(response.body.decode('utf-8'))
+        return int(dat['doc_count']) + 1000
+
+    @gen.coroutine    
     def get(self):
-        self.render('main.html')
+        count = yield self._get_records_count()
+        self.render('main.html', count=count)
 
 
 class SearchHandler(BaseHandler):
@@ -419,7 +428,7 @@ class RegistrationHandler(ChangeHandler):
         if email and not user and not reg:
             _create_new_user(email)
             self.write('Send you to email 1')
-        elif reg:
+        elif reg and not user:
             check_reg = yield _check_registration(reg)
             if check_reg:
                 self.write('На ваш email ранее был отправлен email c сылкой для \
