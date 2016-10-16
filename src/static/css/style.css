@@ -381,7 +381,7 @@ body {
 }
 
 .footer {
-    min-height: 224px;
+    height: 224px;
     background: url("../img/big-red-lollipop.png") no-repeat bottom center;
 }
 
