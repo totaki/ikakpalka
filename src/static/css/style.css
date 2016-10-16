@@ -65,6 +65,7 @@ body {
 .logo {
     width: 115px;
     margin-top: 36px;
+    margin-left: 5px;
     float: left;
 }
 
@@ -264,7 +265,6 @@ body {
     text-align: left;
     margin: 0;
     margin-top: 124px;
-    margin-left: -4px;
     margin-bottom: 56px;
     padding: 0;
 }
@@ -277,6 +277,7 @@ body {
     margin: 0;
     margin-top: 54px;
     margin-bottom: 35px;
+    margin-left: 5px;
 }
 
 .text_about {
@@ -468,6 +469,7 @@ body {
     margin-bottom: 36px;
     padding-left: 36px;
     position: relative;
+    word-wrap: break-word;
 }
 
 .contacts_field>div::before {
