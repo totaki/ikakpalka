@@ -770,14 +770,14 @@ body {
 }
 
 .men_stick>img {
-    width: 100%;
+    width: 300px;
 }
 
 @media (max-width: 480px) {
     .container,
     .main_container,
     .view_contact_container {
-        width: 100%;
+        width: 92%;
     }
     .simple_contact {
         font-size: 60px;
