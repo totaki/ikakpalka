@@ -355,6 +355,8 @@ body {
     color: #ffffff;
     border: 2px solid transparent;
     float: left;
+    font-size: 12px;
+    letter-spacing: 2.4px;
 }
 
 .create_btn:hover {
@@ -367,6 +369,8 @@ body {
     background-color: #8f75be;
     color: #ffffff;
     border: 2px solid transparent;
+    font-size: 12px;
+    letter-spacing: 2.4px;
 }
 
 .enter_btn:hover {
