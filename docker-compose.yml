@@ -29,7 +29,7 @@ services:
     volumes:
       - ./src/:/app
     ports:
-      - "10000:10001"
+      - "10001:10000"
   nginx:
     image: nginx:1.10
     container_name: local.ikp.nginx
