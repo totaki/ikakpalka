@@ -32,12 +32,15 @@ body {
     text-align: center;
     height: 100%;
     font-size: 16px;
-    min-width: 400px;
+    min-width: 300px;
 }
 
 .header {
     height:100%;
-    background: url("../img/ornament.png") no-repeat bottom right #ffc80a;
+    background: url("../img/ornament.png") no-repeat bottom right,
+                        url("../img/back_1.png") no-repeat top left;
+    background-color:#ffc80a;
+    min-height: 340px;
 }
 
 .container,
@@ -50,6 +53,11 @@ body {
     padding-top: 1px;
 }
 
+.container {
+    position: relative;
+}
+
+
 .main_container {
     height: auto;
 }
@@ -59,6 +67,70 @@ body {
     margin-top: 36px;
     float: left;
 }
+
+.enter_advice {
+    color: #ffffff;
+    font-size: 28px;
+    margin: 0 auto;
+    margin-top: 186px;
+    margin-bottom: 36px;
+    text-shadow: 1px 1px 2px #E98C79;
+}
+
+@media (max-width: 576px) {
+    .enter_advice {
+        margin-top: 120px;
+    }
+}
+
+@media (max-height: 500px) {
+    .enter_advice {
+        margin-top: 100px;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+}
+
+
+.number_wrapper_index {
+    margin: 0 auto;
+}
+
+.enter_number_new_index {
+    border: 2px solid #E8E9ED;
+    height: 48px;
+    width: 246px;
+    border-radius: 48px;
+    outline: none;
+    color: #9FA3A7;
+    font-size: 18px;
+    letter-spacing: 5.6px;
+    text-align: center;
+}
+
+.enter_number_new_index:focus {
+    color: #212121;
+}
+
+.find_index {
+    margin: 0 auto;
+    height: 48px;
+    width: 112px;
+    margin-top: 16px;
+    border-radius: 48px;
+    border: 2px solid transparent;
+    background-color: #0EBAC5;
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 2.4px;
+}
+
+.find_index:hover {
+    background-color:  #ffffff;
+    border-color: #0EBAC5;
+    color: #0EBAC5;
+}
+
 
 .shape_form {
     position: relative;
@@ -165,9 +237,20 @@ body {
 }
 
 .users_amount {
-    margin-top: 80px;
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right:0;
     font-size: 14px;
     color: #F05638;
+}
+
+.users_amount::before {
+    content: url("../img/oval_1.png");
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    margin-left: -21px;
 }
 
 .main_content {
@@ -642,9 +725,9 @@ body {
 }
 
 @media (max-width: 480px) {
-    .container {
-        width: 90%;
-    }
+    /*.container {*/
+        /*width: 90%;*/
+    /*}*/
     .error_header_400,
     .error_header_403,
     .error_header_404,
@@ -680,4 +763,26 @@ body {
 
 .men_stick {
     margin-top: 80px;
+}
+
+.men_stick>img {
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .container,
+    .main_container,
+    .view_contact_container {
+        width: 100%;
+    }
+    .simple_contact {
+        font-size: 60px;
+    }
+    .error_text {
+        width: 300px;
+    }
+
+    .info_text {
+        width: 300px;
+    }
 }
