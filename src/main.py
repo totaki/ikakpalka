@@ -8,6 +8,7 @@ import tornado.web
 import uuid
 from email.mime.text import MIMEText
 from secrets import *
+from defines import *
 from tornado import gen
 from tornado import httpclient
 
@@ -25,10 +26,119 @@ DB_RECORDS = DB_BASE_URL + 'ikp_records/'
 DB_USERS = DB_BASE_URL + 'ikp_users/'
 DB_SESSIONS = DB_BASE_URL + 'ikp_sessions/'
 DB_REGISTRATIONS = DB_BASE_URL + 'ikp_registrations/'
-QUERY = '_id'
-ID_REGEX = r'\d{9}'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
+ID_REGEX = r'\d{9}'
+LEN_ID = 9 
+QUERY_SPLITER = ' '
+STR = ''
+SEARCH_QUERY = '_id'
+
+
+class ID():
+    
+    def __init__(self, number):
+        if isinstance(number, str):
+            number = STR.join(number.split(QUERY_SPLITER))
+        try:
+            self._number = int(number)
+        except ValueError:
+            self._number = None
+
+    
+    def _get_number(self, func):
+        if self._number != None:
+            return func(self._number)
+    
+    @staticmethod
+    def _to_str(n):
+        return '0' * (LEN_ID - len(str(n))) + str(n)
+    
+    @property
+    def int(self):
+        return self._get_number(int)
+
+    @property
+    def str(self):
+        return self._get_number(self._to_str)
+
+
+class Document:
+    
+    _create_path = None
+    _delete_path = None
+    _get_path = None
+    _update_path = None
+
+    @classmethod
+    @gen.coroutine
+    def _send_request(cls, *args, **kwargs):
+        err, ok = (None, None)
+        try:
+            response = yield httpclient.AsyncHTTPClient().fetch(
+                *args, **kwargs
+            )
+            ok = cls._from_json(response.body)
+        except httpclient.HTTPError as e:
+            err = e.code
+        raise gen.Return((err, ok))
+
+    @staticmethod
+    def _to_json(string):
+        return json.dumps(string).encode(CODE)
+
+    @staticmethod
+    def _from_json(body):
+        return json.loads(body.decode(CODE))
+
+    @classmethod
+    def create(cls):
+        pass
+
+    def delete(self):
+        pass
+
+    @classmethod
+    @gen.coroutine
+    def get(cls, _id):
+        path = cls._get_path.format(_id)
+        return (yield cls._send_request(path))
+
+    def update(self):
+        pass
+
+
+class Records(Document):
+    
+    _get_path = DB_RECORDS + '{}'
+
+
+class ExpiresDate():
+
+    def __init__(self, date):
+        pass
+    
+    @classmethod
+    def from_now(cls):
+        pass
+
+    @classmethod
+    def from_date(cls, date):
+        pass
+
+    def check_date(self, date):
+        pass
+
+    def check_now(self):
+        pass
+
+    @property
+    def object(self):
+        pass
+
+    @property
+    def timestamp(self):
+        pass
 
 
 def _closed_date(dt, seconds):
@@ -119,7 +229,6 @@ def _change_record(record, dct):
 @gen.coroutine 
 def _create_session(record, dt, session=None):
     try:
-        #import pdb;pdb.set_trace()
         if not session:
             session = uuid.uuid4().hex
         response = yield httpclient.AsyncHTTPClient().fetch(
@@ -303,39 +412,28 @@ class MainHandler(BaseHandler):
         self.render('main.html', count=count)
 
 
+class SearchQueryHandler(BaseHandler):
+
+    @gen.coroutine
+    def get(self):
+        _id = ID(self.get_query_argument(SEARCH_QUERY, None))
+        if _id.str:
+            self.redirect('/' + str(_id.int))
+        else:
+            self.render('400.html')
+
+
 class SearchHandler(BaseHandler):
 
-    def _validate_query(self):
-        _id = ''.join(str(self._id).split('-'))
-        if not (str(_id).isdigit() and len(_id) == 9):
-            _id = None
-        return _id
-
-    def _prepare_json(self, response):
-        if response:
-            ok = json.loads(response.body.decode('utf-8'))
-            del ok['_id']; del ok['_rev']
-        else:
-            ok = response
-        return ok
-
     @gen.coroutine    
-    def get(self):
-        err = (500, 'Server error')
-        _id = self._validate_query() 
-        if _id:
-            response = yield self._get_records(_id)
-            if response != False:
-                self.render('search.html', _id=_id, 
-                            response=self._prepare_json(response),
-                )
-                err = None
+    def get(self, arg):
+        _id = ID(arg)
+        if _id.str:
+            err, ok = yield Records.get(_id.str)
+            self.render('search.html', _id=_id.str, response=ok)
         else:
-            err = (400, 'Bad request')
-
-        if err:
-            self.render('500.html')
-
+            self.render('400.html')
+           
 
 class ChangeHandler(BaseHandler):
     
@@ -524,14 +622,15 @@ class NotFoundHandler(tornado.web.RequestHandler):
 if __name__ == "__main__":
     application = tornado.web.Application([
         (r'/', MainHandler),
-        (r'/search', SearchHandler),
+        (r'/(\d*)', SearchHandler),
+        (r'/search', SearchQueryHandler),
         (r'/registration', RegistrationHandler),
         (r'/change', ChangeHandler),
         (r'/login', LoginHandler),
         (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': './static/'}),
         (r'/(.*)', NotFoundHandler),
 
-    ], debug=False, template_path='./templates/')
-    application.listen(10000)
+    ], debug=DEBUG_MODE, template_path='./templates/')
+    application.listen(NODE_PORT)
     tornado.ioloop.IOLoop.current().start()
 

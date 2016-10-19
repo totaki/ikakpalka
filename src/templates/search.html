@@ -25,14 +25,14 @@
             <form action="/search" method="get">
                 <div class="number_loupe">
                     <input class="enter_number" type="text" name="_id"
-                    id="search_input" placeholder="XXX-XXX-XXX" required>
+                    id="search_input" placeholder="Введите номер" required  maxlength="11">
                     <button class="find_button loupe" type="submit"></button>
                 </div>
             </form>
         </div>
         <section class="contacts_field">
             <span>номер контакта</span>
-            <h3 id="inique_ID">{{ _id[:3] }}-{{ _id[3:6] }}-{{ _id[-3:] }}</h3>
+            <h3 id="inique_ID">{{ _id[:3] }} {{ _id[3:6] }} {{ _id[-3:] }}</h3>
             {% if response %}
               {% for i in response.get('email', []) %}
                 <div id="contact_email">{{ i }}</div>
@@ -52,10 +52,6 @@
         </section>
     </div>
 </header>
-<script src="/static/js/jquery-3.1.1.min.js"></script>
-<script src="/static/js/jquery.mask.min.js"></script>
-<script>
-    $("#search_input").mask("999-999-999");
-</script>
+<script src="/static/js/input_validator.js"></script>
 </body>
 </html>

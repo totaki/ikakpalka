@@ -18,7 +18,7 @@
         </div>
         <section class="contacts_field edit_contact_fields">
             <span>номер контакта</span>
-            <h3 id="inique_ID">{{ record[:3] }}-{{ record[3:6] }}-{{ record[-3:] }}</h3>
+            <h3 id="inique_ID">{{ record[:3] }} {{ record[3:6] }} {{ record[-3:] }}</h3>
             <form action="/change" method="post" id="change_form" name="change_form">
               <input type="hidden" name="_session" value="{{ session }}">
               <input type="hidden" name="_record" value="{{ record }}">

@@ -1,6 +1,15 @@
 version: '2'
 
 services:
+  nodetemplate:
+    build:
+      context: ./
+    image: ikakpalka:0.2
+    command: python -m main
+    environment:
+      - IKAKPALKA_PORT=10000
+    volumes:
+      - ./src/:/app
   db:
     image: couchdb:1.6 
     container_name: local.ikp
@@ -10,26 +19,14 @@ services:
       options:
         max-size: "100m"
         max-file: "1"
-  app:
-    build:
-      context: ./
-    image: ikakpalka:0.1
-    container_name: local.ikp.app
-    command: python -m main
-    volumes:
-      - ./src/:/app
-    ports:
-      - "10000:10000"
-  bal:
-    build:
-      context: ./
-    image: ikakpalka:0.1
-    container_name: local.ikp.bal
-    command: python -m main
-    volumes:
-      - ./src/:/app
-    ports:
-      - "10001:10000"
+  node1:
+    extends:
+      service: nodetemplate
+    container_name: local.ikp.node1
+  node2:
+    extends:
+      service: nodetemplate
+    container_name: local.ikp.node2
   nginx:
     image: nginx:1.10
     container_name: local.ikp.nginx
