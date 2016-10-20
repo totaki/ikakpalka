@@ -38,6 +38,10 @@ def test_create_records(tloop):
         create_records, '888888888', {}
     ))
     assert isinstance(response, Records)
+    err, response = tloop.run_sync(functools.partial(
+        response.update, {'key': 'value'}
+    ))
+    assert response.data['key'] == 'value'
     err, response = tloop.run_sync(response.delete)
     assert isinstance(response, dict)
 

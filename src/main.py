@@ -68,6 +68,7 @@ class Document:
     _headers = {'Content-Type': 'application/json'} 
     _key_id = '_id'
     _key_rev = '_rev'
+    _cls_path = None
     _create_path = None
     _delete_path = None
     _get_path = None
@@ -87,6 +88,14 @@ class Document:
     @property
     def data(self):
         return self._data
+ 
+    @classmethod
+    def get_path(cls, _id):
+        return cls._cls_path + str(_id)
+
+    @classmethod
+    def get_path_with_rev(cls, _id, rev):
+        return cls._cls_path + str(_id) + '?rev=' + str(rev)
  
     @classmethod
     @gen.coroutine
@@ -114,7 +123,7 @@ class Document:
     def create(cls, _id, data):
         obj = None
         body = cls._to_json(data)
-        path = cls._create_path.format(_id)
+        path = cls.get_path(_id)
         err, ok = yield cls._send_request(
             path, method='PUT', headers=cls._headers, body=body
         )
@@ -127,7 +136,7 @@ class Document:
     @gen.coroutine
     def delete(self):
         dct = None
-        path = self._delete_path.format(self.id, self.rev)
+        path = self.get_path_with_rev(self.id, self.rev)
         err, ok = yield self._send_request(path, method='DELETE')
         if not err:
             del self._data[self._key_rev]
@@ -138,21 +147,22 @@ class Document:
     @gen.coroutine
     def get(cls, _id):
         obj = None
-        path = cls._get_path.format(_id)
+        path = cls.get_path(_id)
         err, ok = yield cls._send_request(path)
         if not err:
             obj = cls(ok)
         return (err, obj)
 
-    def update(self):
-        pass
+    @gen.coroutine
+    def update(self, data):
+        _id = self.id
+        data[self._key_rev] = self.rev
+        return (yield self.create(_id, data))
 
 
 class Records(Document):
     
-    _get_path = DB_RECORDS + '{}'
-    _create_path = DB_RECORDS + '{}'
-    _delete_path = DB_RECORDS + '{}?rev={}'
+    _cls_path = DB_RECORDS
 
 
 class ExpiresDate():
