@@ -65,11 +65,29 @@ class ID():
 
 class Document:
     
+    _headers = {'Content-Type': 'application/json'} 
+    _key_id = '_id'
+    _key_rev = '_rev'
     _create_path = None
     _delete_path = None
     _get_path = None
     _update_path = None
 
+    def __init__(self, data):
+        self._data = data
+
+    @property
+    def id(self):
+        return self._data[self._key_id]
+    
+    @property
+    def rev(self):
+        return self._data[self._key_rev]
+ 
+    @property
+    def data(self):
+        return self._data
+ 
     @classmethod
     @gen.coroutine
     def _send_request(cls, *args, **kwargs):
@@ -92,17 +110,39 @@ class Document:
         return json.loads(body.decode(CODE))
 
     @classmethod
-    def create(cls):
-        pass
+    @gen.coroutine
+    def create(cls, _id, data):
+        obj = None
+        body = cls._to_json(data)
+        path = cls._create_path.format(_id)
+        err, ok = yield cls._send_request(
+            path, method='PUT', headers=cls._headers, body=body
+        )
+        if not err:
+            err, ok = yield cls.get(_id)
+        if not err:
+            obj = ok
+        return (err, obj)
 
+    @gen.coroutine
     def delete(self):
-        pass
+        dct = None
+        path = self._delete_path.format(self.id, self.rev)
+        err, ok = yield self._send_request(path, method='DELETE')
+        if not err:
+            del self._data[self._key_rev]
+            dct = self.data
+        return (err, dct)
 
     @classmethod
     @gen.coroutine
     def get(cls, _id):
+        obj = None
         path = cls._get_path.format(_id)
-        return (yield cls._send_request(path))
+        err, ok = yield cls._send_request(path)
+        if not err:
+            obj = cls(ok)
+        return (err, obj)
 
     def update(self):
         pass
@@ -111,6 +151,8 @@ class Document:
 class Records(Document):
     
     _get_path = DB_RECORDS + '{}'
+    _create_path = DB_RECORDS + '{}'
+    _delete_path = DB_RECORDS + '{}?rev={}'
 
 
 class ExpiresDate():
@@ -420,7 +462,7 @@ class SearchQueryHandler(BaseHandler):
         if _id.str:
             self.redirect('/' + str(_id.int))
         else:
-            self.render('400.html')
+            self.render(T_400)
 
 
 class SearchHandler(BaseHandler):
@@ -430,9 +472,9 @@ class SearchHandler(BaseHandler):
         _id = ID(arg)
         if _id.str:
             err, ok = yield Records.get(_id.str)
-            self.render('search.html', _id=_id.str, response=ok)
+            self.render('search.html', _id=_id.str, response=(ok and ok.data))
         else:
-            self.render('400.html')
+            self.render(T_400)
            
 
 class ChangeHandler(BaseHandler):
