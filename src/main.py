@@ -9,6 +9,9 @@ import uuid
 from email.mime.text import MIMEText
 from secrets import *
 from defines import *
+from db import *
+from mailer import *
+from utils import *
 from tornado import gen
 from tornado import httpclient
 
@@ -21,11 +24,6 @@ RECORDS_TYPES = [
 ]
 
 
-DB_BASE_URL = 'http://local.ikp:5984/'
-DB_RECORDS = DB_BASE_URL + 'ikp_records/'
-DB_USERS = DB_BASE_URL + 'ikp_users/'
-DB_SESSIONS = DB_BASE_URL + 'ikp_sessions/'
-DB_REGISTRATIONS = DB_BASE_URL + 'ikp_registrations/'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
 ID_REGEX = r'\d{9}'
@@ -33,164 +31,6 @@ LEN_ID = 9
 QUERY_SPLITER = ' '
 STR = ''
 SEARCH_QUERY = '_id'
-
-
-class ID():
-    
-    def __init__(self, number):
-        if isinstance(number, str):
-            number = STR.join(number.split(QUERY_SPLITER))
-        try:
-            self._number = int(number)
-        except ValueError:
-            self._number = None
-
-    
-    def _get_number(self, func):
-        if self._number != None:
-            return func(self._number)
-    
-    @staticmethod
-    def _to_str(n):
-        return '0' * (LEN_ID - len(str(n))) + str(n)
-    
-    @property
-    def int(self):
-        return self._get_number(int)
-
-    @property
-    def str(self):
-        return self._get_number(self._to_str)
-
-
-class Document:
-    
-    _headers = {'Content-Type': 'application/json'} 
-    _key_id = '_id'
-    _key_rev = '_rev'
-    _cls_path = None
-    _create_path = None
-    _delete_path = None
-    _get_path = None
-    _update_path = None
-
-    def __init__(self, data):
-        self._data = data
-
-    @property
-    def id(self):
-        return self._data[self._key_id]
-    
-    @property
-    def rev(self):
-        return self._data[self._key_rev]
- 
-    @property
-    def data(self):
-        return self._data
- 
-    @classmethod
-    def get_path(cls, _id):
-        return cls._cls_path + str(_id)
-
-    @classmethod
-    def get_path_with_rev(cls, _id, rev):
-        return cls._cls_path + str(_id) + '?rev=' + str(rev)
- 
-    @classmethod
-    @gen.coroutine
-    def _send_request(cls, *args, **kwargs):
-        err, ok = (None, None)
-        try:
-            response = yield httpclient.AsyncHTTPClient().fetch(
-                *args, **kwargs
-            )
-            ok = cls._from_json(response.body)
-        except httpclient.HTTPError as e:
-            err = e.code
-        raise gen.Return((err, ok))
-
-    @staticmethod
-    def _to_json(string):
-        return json.dumps(string).encode(CODE)
-
-    @staticmethod
-    def _from_json(body):
-        return json.loads(body.decode(CODE))
-
-    @classmethod
-    @gen.coroutine
-    def create(cls, _id, data):
-        obj = None
-        body = cls._to_json(data)
-        path = cls.get_path(_id)
-        err, ok = yield cls._send_request(
-            path, method='PUT', headers=cls._headers, body=body
-        )
-        if not err:
-            err, ok = yield cls.get(_id)
-        if not err:
-            obj = ok
-        return (err, obj)
-
-    @gen.coroutine
-    def delete(self):
-        dct = None
-        path = self.get_path_with_rev(self.id, self.rev)
-        err, ok = yield self._send_request(path, method='DELETE')
-        if not err:
-            del self._data[self._key_rev]
-            dct = self.data
-        return (err, dct)
-
-    @classmethod
-    @gen.coroutine
-    def get(cls, _id):
-        obj = None
-        path = cls.get_path(_id)
-        err, ok = yield cls._send_request(path)
-        if not err:
-            obj = cls(ok)
-        return (err, obj)
-
-    @gen.coroutine
-    def update(self, data):
-        _id = self.id
-        data[self._key_rev] = self.rev
-        return (yield self.create(_id, data))
-
-
-class Records(Document):
-    
-    _cls_path = DB_RECORDS
-
-
-class ExpiresDate():
-
-    def __init__(self, date):
-        pass
-    
-    @classmethod
-    def from_now(cls):
-        pass
-
-    @classmethod
-    def from_date(cls, date):
-        pass
-
-    def check_date(self, date):
-        pass
-
-    def check_now(self):
-        pass
-
-    @property
-    def object(self):
-        pass
-
-    @property
-    def timestamp(self):
-        pass
 
 
 def _closed_date(dt, seconds):
@@ -668,7 +508,7 @@ class NotFoundHandler(tornado.web.RequestHandler):
 
     @gen.coroutine
     def get(self, path):
-        self.render('404.html')
+        self.render(T_404)
 
 
 if __name__ == "__main__":
@@ -682,7 +522,7 @@ if __name__ == "__main__":
         (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': './static/'}),
         (r'/(.*)', NotFoundHandler),
 
-    ], debug=DEBUG_MODE, template_path='./templates/')
+    ], debug=DEBUG_MODE, template_path=TEMPLATE_PATH)
     application.listen(NODE_PORT)
     tornado.ioloop.IOLoop.current().start()
 
