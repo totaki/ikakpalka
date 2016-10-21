@@ -22,5 +22,6 @@ T_404 = '404.html'
 
 
 # Email templates
+EMAIL_SENDER = 'Команда ИКАКПАЛКА.РФ'
 EMAIL_TEMPLATE_PATH = 'email'
 TM_LOGIN_USER = 'login_user.txt'

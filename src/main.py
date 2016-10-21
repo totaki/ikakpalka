@@ -24,8 +24,6 @@ RECORDS_TYPES = [
 ]
 
 
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 465
 ID_REGEX = r'\d{9}'
 LEN_ID = 9 
 QUERY_SPLITER = ' '
