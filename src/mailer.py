@@ -2,9 +2,11 @@
 
 import os
 import smtplib
+import tornado.web
 from email.mime.text import MIMEText
 from email.utils import formataddr
 from email.header import Header
+from tornado import gen
 from defines import *
 from secrets import *
 
@@ -60,4 +62,29 @@ class Mailer():
         s.login(cls._user, cls._password)
         s.send_message(msg)
         s.quit()
+
+
+class SendMailHandler(tornado.web.RequestHandler):
+
+    _query_args = ['to', 'template', 'link']
+
+    def _get_args(self):
+        return {
+            i:self.get_query_argument(i, default=None) for i in
+            self._query_args
+        }
+    
+    @gen.coroutine
+    def get(self):
+        Mailer.send(**self._get_args())
+        self.write(STR)
+
+
+if __name__ == "__main__":
+    application = tornado.web.Application([
+        (r'/send', SendMailHandler),
+
+    ], debug=DEBUG_MODE)
+    application.listen(NODE_PORT)
+    tornado.ioloop.IOLoop.current().start()
 

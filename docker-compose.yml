@@ -27,6 +27,11 @@ services:
     extends:
       service: nodetemplate
     container_name: local.ikp.node2
+  mailer:
+    extends:
+      service: nodetemplate
+    container_name: local.ikp.mailer
+    command: python -m mailer
   nginx:
     image: nginx:1.10
     container_name: local.ikp.nginx
