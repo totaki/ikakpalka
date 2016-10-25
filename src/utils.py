@@ -1,5 +1,6 @@
 # Module for help
 
+import datetime as DT
 from defines import *
 
 
@@ -33,29 +34,34 @@ class ID():
 
 class ExpiresDate():
 
-    def __init__(self, date):
-        pass
+    def __init__(self, date, delta_seconds=None):
+        if isinstance(date, DT.datetime):
+            _date = date
+        elif isinstance(date, str) or isinstance(date, float):
+            _date = DT.datetime.fromtimestamp(float(date))
+        else:
+            raise TypeError('Date must be datetime.datetime or str instance')
+
+        if delta_seconds == None:
+            self._expires_date = _date
+        else:
+            self._expires_date = (_date + DT.timedelta(seconds=delta_seconds))
     
     @classmethod
-    def from_now(cls):
-        pass
-
-    @classmethod
-    def from_date(cls, date):
-        pass
+    def from_now(cls, delta_seconds=None):
+        return cls(DT.datetime.utcnow(), delta_seconds)
 
     def check_date(self, date):
-        pass
+        return not ((self._expires_date - date).days < 0)
 
     def check_now(self):
-        pass
-
-    @property
-    def object(self):
-        pass
+        return self.check_date(DT.datetime.utcnow())
 
     @property
     def timestamp(self):
-        pass
+       return self._expires_date.timestamp() 
 
+    @property
+    def dt(self):
+       return self._expires_date 
 

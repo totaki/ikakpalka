@@ -31,6 +31,13 @@ STR = ''
 SEARCH_QUERY = '_id'
 
 
+SETTINGS = dict(
+    debug=DEBUG_MODE, 
+    template_path=TEMPLATE_PATH,
+    cookie_secret=COOKIE_SECRET,
+    xsrf_cookies=True,
+)
+
 def _closed_date(dt, seconds):
     return (dt + datetime.timedelta(seconds=seconds)).timestamp()
 
@@ -519,8 +526,7 @@ if __name__ == "__main__":
         (r'/login', LoginHandler),
         (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': './static/'}),
         (r'/(.*)', NotFoundHandler),
-
-    ], debug=DEBUG_MODE, template_path=TEMPLATE_PATH)
+    ], **SETTINGS)
     application.listen(NODE_PORT)
     tornado.ioloop.IOLoop.current().start()
 

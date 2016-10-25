@@ -15,6 +15,10 @@ DB_SESSIONS = DB_BASE_URL + 'ikp_sessions/'
 DB_USERS = DB_BASE_URL + 'ikp_users/'
 
 
+# Mailer
+SENDER_PATH = '/send'
+
+
 # Templates
 TEMPLATE_PATH = './templates/'
 T_400 = '400.html'

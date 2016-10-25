@@ -70,7 +70,7 @@ class SendMailHandler(tornado.web.RequestHandler):
 
     def _get_args(self):
         return {
-            i:self.get_query_argument(i, default=None) for i in
+            i:self.get_query_argument(i, default=STR) for i in
             self._query_args
         }
     
