@@ -1,11 +1,11 @@
 import datetime
 import json
 import random
-import re
 import smtplib
 import tornado.ioloop
 import tornado.web
 import uuid
+import urllib.parse
 from email.mime.text import MIMEText
 from secrets import *
 from defines import *
@@ -25,25 +25,26 @@ RECORDS_TYPES = [
 
 
 ID_REGEX = r'\d{9}'
-LEN_ID = 9 
+LEN_ID = 9
 QUERY_SPLITER = ' '
 STR = ''
 SEARCH_QUERY = '_id'
 
 
 SETTINGS = dict(
-    debug=DEBUG_MODE, 
+    debug=DEBUG_MODE,
     template_path=TEMPLATE_PATH,
     cookie_secret=COOKIE_SECRET,
     xsrf_cookies=True,
 )
+
 
 def _closed_date(dt, seconds):
     return (dt + datetime.timedelta(seconds=seconds)).timestamp()
 
 
 def _random_gif():
-  return random.choice([1,2])
+    return random.choice([1, 2])
 
 
 def _send_email(email, subject, text):
@@ -57,7 +58,7 @@ def _send_email(email, subject, text):
     s.quit()
 
 
-@gen.coroutine    
+@gen.coroutine
 def _get_user(email):
     try:
         response = yield httpclient.AsyncHTTPClient().fetch(
@@ -71,13 +72,13 @@ def _get_user(email):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _create_user(email, record=None):
     try:
         if not record:
-            record = yield _get_next_id() 
+            record = yield _get_next_id()
         response = yield httpclient.AsyncHTTPClient().fetch(
-            DB_USERS + email, method='PUT', 
+            DB_USERS + email, method='PUT',
             headers={'Content-Type': 'application/json'},
             body=json.dumps({'record': record}).encode('utf-8')
         )
@@ -90,12 +91,12 @@ def _create_user(email, record=None):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _create_records(record):
     try:
         dct = dict((i, []) for i in RECORDS_TYPES)
         response = yield httpclient.AsyncHTTPClient().fetch(
-            DB_RECORDS + record, method='PUT', 
+            DB_RECORDS + record, method='PUT',
             headers={'Content-Type': 'application/json'},
             body=json.dumps(dct).encode('utf-8')
         )
@@ -107,11 +108,11 @@ def _create_records(record):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _change_record(record, dct):
     try:
         response = yield httpclient.AsyncHTTPClient().fetch(
-            DB_RECORDS + str(record), method='PUT', 
+            DB_RECORDS + str(record), method='PUT',
             headers={'Content-Type': 'application/json'},
             body=json.dumps(dct).encode('utf-8')
         )
@@ -123,13 +124,13 @@ def _change_record(record, dct):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _create_session(record, dt, session=None):
     try:
         if not session:
             session = uuid.uuid4().hex
         response = yield httpclient.AsyncHTTPClient().fetch(
-            DB_SESSIONS + session, method='PUT', 
+            DB_SESSIONS + session, method='PUT',
             headers={'Content-Type': 'application/json'},
             body=json.dumps({'record': record, 'date': dt}).encode('utf-8')
         )
@@ -142,16 +143,16 @@ def _create_session(record, dt, session=None):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _delete_session(session, rev):
     raise gen.Return(True)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _get_session(session):
     try:
         response = yield httpclient.AsyncHTTPClient().fetch(
-            DB_SESSIONS + session 
+            DB_SESSIONS + session
         )
     except httpclient.HTTPError as err:
         if err.code == 404:
@@ -161,7 +162,7 @@ def _get_session(session):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _check_session(data, session, record):
     response = None
     dct = json.loads(data.body.decode('utf-8'))
@@ -173,9 +174,9 @@ def _check_session(data, session, record):
         else:
             response = (session, record)
     raise gen.Return(response)
-            
 
-@gen.coroutine 
+
+@gen.coroutine
 def _check_auth(session, record):
     data = yield _get_session(session)
     if data:
@@ -195,11 +196,11 @@ def _get_next_id():
     raise gen.Return(zeros + str(i))
 
 
-@gen.coroutine 
+@gen.coroutine
 def _delete_registration(email, rev):
     try:
         response = yield httpclient.AsyncHTTPClient().fetch(
-            DB_REGISTRATIONS + email + '?rev=' + rev, method='DELETE', 
+            DB_REGISTRATIONS + email + '?rev=' + rev, method='DELETE',
         )
     except httpclient.HTTPError as err:
         if err.code == 404:
@@ -209,7 +210,7 @@ def _delete_registration(email, rev):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _get_registration(email):
     try:
         response = yield httpclient.AsyncHTTPClient().fetch(
@@ -223,13 +224,13 @@ def _get_registration(email):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _create_registration(email, dt, session=None):
     try:
         if not session:
             session = uuid.uuid4().hex
         response = yield httpclient.AsyncHTTPClient().fetch(
-            DB_REGISTRATIONS + email, method='PUT', 
+            DB_REGISTRATIONS + email, method='PUT',
             headers={'Content-Type': 'application/json'},
             body=json.dumps({'session': session, 'date': dt}).encode('utf-8')
         )
@@ -242,7 +243,7 @@ def _create_registration(email, dt, session=None):
     raise gen.Return(response)
 
 
-@gen.coroutine 
+@gen.coroutine
 def _check_registration(data):
     response = None
     dct = json.loads(data.body.decode('utf-8'))
@@ -259,7 +260,7 @@ registration_text = 'Для продолжения пройдите по сле�
 является входом в ваш аккаунт в течени 10 минут \n\n{}\n\nКоманда икакпалка.рф'
 
 
-@gen.coroutine 
+@gen.coroutine
 def _create_new_user(email):
     new_reg = yield _create_registration(
         email,
@@ -269,23 +270,43 @@ def _create_new_user(email):
         BASE_URL, new_reg, email
     )
     _send_email(email, 'Регистрация на сервисе икакпалка.рф',
-                registration_text.format(link) 
-    )
+                registration_text.format(link)
+                )
 
 
 class BaseHandler(tornado.web.RequestHandler):
 
+    def get_current_user(self):
+        cookie = self.get_secure_cookie(USER_COOKIE)
+        if cookie:
+            return ID(cookie)
+
+    @classmethod
+    @gen.coroutine
+    def send_email(cls, to, link):
+        client = httpclient.AsyncHTTPClient()
+        query = urllib.parse.urlencode({
+            'to': to, 'link': link, 'template': cls.template
+        })
+        path = '{}/send?{}'.format(MAILER_URL, query)
+        try:
+            response = yield client.fetch(path)
+        except Exception as err:
+            pass
+
     @property
     def _id(self):
         return self.get_query_argument(QUERY, default=None)
-        
+
     def render_error(self, status, text):
         self.render('error.html', status=status, text=text)
 
-    @gen.coroutine    
+    @gen.coroutine
     def _get_records(self, _id):
         try:
-            response = yield httpclient.AsyncHTTPClient().fetch(DB_RECORDS + str(_id))
+            response = yield httpclient.AsyncHTTPClient().fetch(
+                DB_RECORDS + str(_id)
+            )
         except httpclient.HTTPError as err:
             if err.code == 404:
                 response = None
@@ -296,14 +317,13 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainHandler(BaseHandler):
 
-
-    @gen.coroutine    
+    @gen.coroutine
     def _get_records_count(self):
         response = yield httpclient.AsyncHTTPClient().fetch(DB_RECORDS)
         dat = json.loads(response.body.decode('utf-8'))
         return int(dat['doc_count']) + 1000
 
-    @gen.coroutine    
+    @gen.coroutine
     def get(self):
         count = yield self._get_records_count()
         self.render('main.html', count=count)
@@ -322,7 +342,7 @@ class SearchQueryHandler(BaseHandler):
 
 class SearchHandler(BaseHandler):
 
-    @gen.coroutine    
+    @gen.coroutine
     def get(self, arg):
         _id = ID(arg)
         if _id.str:
@@ -330,15 +350,15 @@ class SearchHandler(BaseHandler):
             self.render('search.html', _id=_id.str, response=(ok and ok.data))
         else:
             self.render(T_400)
-           
+
 
 class ChangeHandler(BaseHandler):
-    
-    @gen.coroutine    
+
+    @gen.coroutine
     def get_user(self):
         user = None
         if self.request.method == 'GET':
-            get_func = self.get_query_argument 
+            get_func = self.get_query_argument
         elif self.request.method == 'POST':
             get_func = self.get_body_argument
         else:
@@ -352,10 +372,10 @@ class ChangeHandler(BaseHandler):
                 user = yield _check_auth(session, record)
         raise gen.Return(user)
 
-    @gen.coroutine    
+    @gen.coroutine
     def get(self):
-        user = yield self.get_user() 
-        if user: 
+        user = yield self.get_user()
+        if user:
             response = yield self._get_records(user[1])
             dct = json.loads(response.body.decode('utf-8'))
             self.render('change.html', session=user[0], record=user[1],
@@ -363,16 +383,15 @@ class ChangeHandler(BaseHandler):
                         )
         else:
             self.render(
-                'info.html', 
+                'info.html',
                 message='Сессия не существует или не активна.',
                 gif=_random_gif()
             )
-            
 
-    @gen.coroutine    
+    @gen.coroutine
     def post(self):
-        user = yield self.get_user() 
-        if user: 
+        user = yield self.get_user()
+        if user:
             dct = dict((i, self.get_body_arguments(i)) for i in RECORDS_TYPES)
             response = yield self._get_records(user[1])
             rec = json.loads(response.body.decode('utf-8'))
@@ -381,7 +400,7 @@ class ChangeHandler(BaseHandler):
             self.redirect(BASE_URL + '/search?_id=' + str(user[1]))
         else:
             self.render(
-                'info.html', 
+                'info.html',
                 message='Пользователя не существут',
                 gif=_random_gif()
             )
@@ -389,7 +408,7 @@ class ChangeHandler(BaseHandler):
 
 class RegistrationHandler(ChangeHandler):
 
-    @gen.coroutine    
+    @gen.coroutine
     def get(self):
         session = self.get_query_argument('_session', None)
         email = self.get_query_argument('_email', None)
@@ -413,10 +432,12 @@ class RegistrationHandler(ChangeHandler):
                 if reg:
                     chk_reg = yield _check_registration(reg)
                     if chk_reg:
-                        user = yield _create_user(email) 
-                        records = yield _create_records(str(user)) 
+                        user = yield _create_user(email)
+                        records = yield _create_records(str(user))
                         dt = _closed_date(datetime.datetime.utcnow(), 600)
-                        session = yield _create_session(user, dt, session=session)
+                        session = yield _create_session(
+                            user, dt, session=session
+                        )
                         self.redirect('/change?_session={}&_record={}'.format(
                             str(session), str(user)
                         ))
@@ -427,7 +448,7 @@ class RegistrationHandler(ChangeHandler):
         else:
             self.render('403.html')
 
-    @gen.coroutine    
+    @gen.coroutine
     def post(self):
         err = (400, 'Bad request')
         email = self.get_body_argument('email', default=None)
@@ -436,7 +457,7 @@ class RegistrationHandler(ChangeHandler):
         if email and not user and not reg:
             _create_new_user(email)
             self.render(
-                'info.html', 
+                'info.html',
                 message='На ваш email отправлено письмо с дальнейшими \
 иструкциями.',
                 gif=_random_gif()
@@ -446,7 +467,7 @@ class RegistrationHandler(ChangeHandler):
             check_reg = yield _check_registration(reg)
             if check_reg:
                 self.render(
-                    'info.html', 
+                    'info.html',
                     message='На ваш email ранее был отправлено письмо c сылкой для \
 регистарции',
                     gif=_random_gif()
@@ -455,14 +476,14 @@ class RegistrationHandler(ChangeHandler):
             else:
                 _create_new_user(email)
                 self.render(
-                    'info.html', 
+                    'info.html',
                     message='На ваш email отправлено письмо с дальнейшими \
 иструкциями.',
                     gif=_random_gif()
                 )
         elif user:
             self.render(
-                'info.html', 
+                'info.html',
                 message='Такой email уже используется.',
                 gif=_random_gif()
             )
@@ -470,9 +491,10 @@ class RegistrationHandler(ChangeHandler):
 
 class LoginHandler(BaseHandler):
 
-    _page_text = 'На ваш почтовый ящик отправленна ссылка для входа' 
-    _nouser_text = 'Пользователь с таким email не найден' 
+    _page_text = 'На ваш почтовый ящик отправленна ссылка для входа'
+    _nouser_text = 'Пользователь с таким email не найден'
     _subject = 'Данные для входа на икакпалка.рф'
+    template = 'login'
 
     def _get_login_text(self, session, record):
         link = '{}/change?_session={}&_record={}'.format(
@@ -483,8 +505,22 @@ class LoginHandler(BaseHandler):
 икакпалка.рф'.format(link)
         return text
 
-    @gen.coroutine    
+    @gen.coroutine
     def post(self):
+        if self.current_user:
+            self.redirect('/change')
+        else:
+            email = self.get_body_argument('email', None)
+            if email:
+                err, user = yield Users.get(email)
+
+        if not err:
+            err, session = yield Sessions.create(user.record)
+
+        if not err:
+            pass
+
+        """
         err = (400, 'Bad request')
         text = self._nouser_text
         email = self.get_body_argument('email', default=None)
@@ -496,17 +532,18 @@ class LoginHandler(BaseHandler):
                 session = yield _create_session(user_data['record'], dt)
                 if session:
                     _send_email(
-                        user_data['_id'], self._subject, 
+                        user_data['_id'], self._subject,
                         self._get_login_text(session, user_data['record'])
                     )
                     text = self._page_text
             self.render(
-                'info.html', 
+                'info.html',
                 message=text,
                 gif=_random_gif()
             )
         else:
             self.render('400.html')
+        """
 
 
 class NotFoundHandler(tornado.web.RequestHandler):
@@ -529,4 +566,3 @@ if __name__ == "__main__":
     ], **SETTINGS)
     application.listen(NODE_PORT)
     tornado.ioloop.IOLoop.current().start()
-

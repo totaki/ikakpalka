@@ -1,10 +1,12 @@
 # Module for using CouchDB
 
 import json
+import uuid
 from tornado import httpclient
 from tornado import gen
 from defines import *
 from utils import *
+from secrets import *
 
 
 class Document:
@@ -100,13 +102,58 @@ class Document:
         return (yield self.create(_id, data))
 
 
+class CleanUsers(Document):
+    
+    _cls_path = DB_USERS
+    _key_rec = 'records'
+
+    @property
+    def record(self):
+        return self._data[self._key_rec]
+
+
 class CleanRecords(Document):
     
     _cls_path = DB_RECORDS
+
+
+class ClearSessions(Document):
+
+    _cls_path = DB_SESSIONS
+
+
+class Users(CleanUsers):
+
+    pass 
 
 
 class Records(CleanRecords):
 
     pass 
 
+
+class Sessions(ClearSessions):
+
+    _key_rec = 'records'
+
+    @property
+    def record(self):
+        return self._data[self._key_rec]
+
+    def get_create_link(self):
+        return '{}/login?session={}&record={}'.format(BASE_URL,
+            self.id, self.record
+        ) 
+
+    @classmethod
+    @gen.coroutine
+    def create(cls, record):
+        rec = ID(record)
+        id_ = uuid.uuid4().hex 
+        dt_ = utils.ExpiresDate.fron_now(SESSION_SECOND)
+        result = yield super().create(id_, **dict(
+            record=rec.str,
+            dt=dt_
+        ))
+        raise gen.Return(result)
 

@@ -2,9 +2,10 @@
 
 # Common
 CODE = 'utf-8'
-LEN_ID = 9 
+LEN_ID = 9
 STR = ''
 QUERY_SPLITER = ' '
+USER_COOKIE = 'session'
 
 
 # Database
@@ -13,6 +14,7 @@ DB_RECORDS = DB_BASE_URL + 'ikp_records/'
 DB_REGISTRATIONS = DB_BASE_URL + 'ikp_registrations/'
 DB_SESSIONS = DB_BASE_URL + 'ikp_sessions/'
 DB_USERS = DB_BASE_URL + 'ikp_users/'
+SESSION_SECOND = 300
 
 
 # Mailer
@@ -29,3 +31,5 @@ T_404 = '404.html'
 EMAIL_SENDER = 'Команда ИКАКПАЛКА.РФ'
 EMAIL_TEMPLATE_PATH = 'email'
 TM_LOGIN_USER = 'login_user.txt'
+
+
